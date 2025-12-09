@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Blocks="http://www.eclipse.org/papyrus/sysml/1.6/SysML/Blocks" xmlns:PortsAndFlows="http://www.eclipse.org/papyrus/sysml/1.6/SysML/PortsAndFlows" xmlns:Requirements="http://www.eclipse.org/papyrus/sysml/1.6/SysML/Requirements" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http://www.eclipse.org/papyrus/sysml/1.6/SysML/Blocks http://www.eclipse.org/papyrus/sysml/1.6/SysML#//blocks http://www.eclipse.org/papyrus/sysml/1.6/SysML/PortsAndFlows http://www.eclipse.org/papyrus/sysml/1.6/SysML#//portsandflows http://www.eclipse.org/papyrus/sysml/1.6/SysML/Requirements http://www.eclipse.org/papyrus/sysml/1.6/SysML#//requirements">
+  <uml:Model xmi:id="_zmy70NU5EfCyXKz_9GZJUQ" name="CISTEROfficeEnvironment_Problem">
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_zoryMNU5EfCyXKz_9GZJUQ">
+      <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+    </packageImport>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_zowDoNU5EfCyXKz_9GZJUQ">
+      <importedPackage xmi:type="uml:Package" href="pathmap://SysML16_LIBRARIES/SysML-Standard-Library.uml#SysML.package_packagedElement_Libraries"/>
+    </packageImport>
+    <packagedElement xmi:type="uml:Package" xmi:id="_9szigNU5EfCyXKz_9GZJUQ" name="1 Problem Domain">
+      <packagedElement xmi:type="uml:Package" xmi:id="_DgweINU6EfCyXKz_9GZJUQ" name="1 Black Box">
+        <packagedElement xmi:type="uml:Package" xmi:id="_OdLIYNU6EfCyXKz_9GZJUQ" name="1 Requirements">
+          <packagedElement xmi:type="uml:Class" xmi:id="_m28IkNU6EfCyXKz_9GZJUQ" name="Deviation Alert"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_mgrksNU6EfCyXKz_9GZJUQ" name="Manual Override Control"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_mJRxUNU6EfCyXKz_9GZJUQ" name="User Preference Configuration"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_lzqGoNU6EfCyXKz_9GZJUQ" name="Automatic Temperature Regulation"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_lb_0kNU6EfCyXKz_9GZJUQ" name="Artificial Light Compensation"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_k9moYNU6EfCyXKz_9GZJUQ" name="Automatic Natural Light Optimization"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_SL6rANU6EfCyXKz_9GZJUQ" name="2 System Context">
+          <packagedElement xmi:type="uml:Class" xmi:id="_sBDxINVHEfCyXKz_9GZJUQ" name="CISTER Office Environment">
+            <ownedComment xmi:type="uml:Comment" xmi:id="_S4OkINVKEfC_Rfi3HLrZWg" annotatedElement="_9w5P8NVHEfCyXKz_9GZJUQ _QjsnoNVIEfC_Rfi3HLrZWg">
+              <body>Occupant inputs lighting and temperature preferences.&#xD;
+</body>
+            </ownedComment>
+            <ownedComment xmi:type="uml:Comment" xmi:id="_qoCoYNVKEfC_Rfi3HLrZWg" annotatedElement="_QjsnoNVIEfC_Rfi3HLrZWg _9w5P8NVHEfCyXKz_9GZJUQ">
+              <body>Occupant manually inputs lighting and temperature system configuration.&#xD;
+</body>
+            </ownedComment>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_9w5P8NVHEfCyXKz_9GZJUQ" name="Property1" type="__x1M8NVHEfCyXKz_9GZJUQ" aggregation="composite"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_QjsnoNVIEfC_Rfi3HLrZWg" name="Property2" type="_SKEIgNVIEfC_Rfi3HLrZWg" aggregation="composite"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_TS6m8NVIEfC_Rfi3HLrZWg" name="Property3" type="_T09kENVIEfC_Rfi3HLrZWg" aggregation="composite"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_VBtrENVIEfC_Rfi3HLrZWg" name="Property4" type="_VfyHINVIEfC_Rfi3HLrZWg" aggregation="composite"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="__x1M8NVHEfCyXKz_9GZJUQ" name="Automated Climate Control System"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_SKEIgNVIEfC_Rfi3HLrZWg" name="Occupant"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_T09kENVIEfC_Rfi3HLrZWg" name="Physical Environment"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_VfyHINVIEfC_Rfi3HLrZWg" name="Maintenance Services"/>
+          <packagedElement xmi:type="uml:InformationFlow" xmi:id="_ouFIANVIEfC_Rfi3HLrZWg" name="provides ambient conditions" informationSource="_TS6m8NVIEfC_Rfi3HLrZWg" informationTarget="_9w5P8NVHEfCyXKz_9GZJUQ"/>
+          <packagedElement xmi:type="uml:InformationFlow" xmi:id="_pggDcNVIEfC_Rfi3HLrZWg" name="configures" informationSource="_QjsnoNVIEfC_Rfi3HLrZWg" informationTarget="_9w5P8NVHEfCyXKz_9GZJUQ"/>
+          <packagedElement xmi:type="uml:InformationFlow" xmi:id="_KPaJoNVJEfC_Rfi3HLrZWg" name="notifies" informationSource="_9w5P8NVHEfCyXKz_9GZJUQ" informationTarget="_VBtrENVIEfC_Rfi3HLrZWg"/>
+          <packagedElement xmi:type="uml:InformationFlow" xmi:id="_ViwtMNVJEfC_Rfi3HLrZWg" name="regulates" informationSource="_9w5P8NVHEfCyXKz_9GZJUQ" informationTarget="_TS6m8NVIEfC_Rfi3HLrZWg"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_VRwakNU6EfCyXKz_9GZJUQ" name="3 Use Cases"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Package" xmi:id="_FVRvwNU6EfCyXKz_9GZJUQ" name="2 White Box">
+        <packagedElement xmi:type="uml:Package" xmi:id="_YO2d0NU6EfCyXKz_9GZJUQ" name="1 Functional Decomposition"/>
+        <packagedElement xmi:type="uml:Package" xmi:id="_cyoLANU6EfCyXKz_9GZJUQ" name="2 Conceptual Interfaces"/>
+        <packagedElement xmi:type="uml:Package" xmi:id="_c4WYgNU6EfCyXKz_9GZJUQ" name="3 Conceptual Subsystems"/>
+      </packagedElement>
+    </packagedElement>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_znHr8NU5EfCyXKz_9GZJUQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_znHr8dU5EfCyXKz_9GZJUQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/sysml/1.6/SysML#/"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://SysML16_PROFILES/SysML.profile.uml#SysML"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_zoou4NU5EfCyXKz_9GZJUQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_zoou4dU5EfCyXKz_9GZJUQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/sysml/1.6/SysML#//activities"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://SysML16_PROFILES/SysML.profile.uml#SysML.package_packagedElement_Activities"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_zopV8NU5EfCyXKz_9GZJUQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_zopV8dU5EfCyXKz_9GZJUQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/sysml/1.6/SysML#//allocations"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://SysML16_PROFILES/SysML.profile.uml#SysML.package_packagedElement_Allocations"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_zopV8tU5EfCyXKz_9GZJUQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_zopV89U5EfCyXKz_9GZJUQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/sysml/1.6/SysML#//blocks"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://SysML16_PROFILES/SysML.profile.uml#SysML.package_packagedElement_Blocks"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_zopV9NU5EfCyXKz_9GZJUQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_zop9ANU5EfCyXKz_9GZJUQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/sysml/1.6/SysML#//constraintblocks"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://SysML16_PROFILES/SysML.profile.uml#SysML.package_packagedElement_ConstraintBlocks"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_zop9AdU5EfCyXKz_9GZJUQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_zop9AtU5EfCyXKz_9GZJUQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/sysml/1.6/SysML#//deprecatedelements"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://SysML16_PROFILES/SysML.profile.uml#SysML.package_packagedElement_DeprecatedElements"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_zop9A9U5EfCyXKz_9GZJUQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_zop9BNU5EfCyXKz_9GZJUQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/sysml/1.6/SysML#//modelelements"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://SysML16_PROFILES/SysML.profile.uml#SysML.package_packagedElement_ModelElements"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_zoqkENU5EfCyXKz_9GZJUQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_zoqkEdU5EfCyXKz_9GZJUQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/sysml/1.6/SysML#//portsandflows"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://SysML16_PROFILES/SysML.profile.uml#SysML.package_packagedElement_Ports_u0026Flows"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_zoqkEtU5EfCyXKz_9GZJUQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_zoqkE9U5EfCyXKz_9GZJUQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/sysml/1.6/SysML#//requirements"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://SysML16_PROFILES/SysML.profile.uml#SysML.package_packagedElement_Requirements"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_zorLINU5EfCyXKz_9GZJUQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_zorLIdU5EfCyXKz_9GZJUQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/uml2/5.0.0/UML/Profile/Standard#/"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://UML_PROFILES/Standard.profile.uml#_0"/>
+    </profileApplication>
+  </uml:Model>
+  <Requirements:Requirement xmi:id="_k9tWENU6EfCyXKz_9GZJUQ" base_NamedElement="_k9moYNU6EfCyXKz_9GZJUQ" id="R-1" text="While the system is in Automatic Mode, the ACCS shall adjust the smart blinds to the open position to maximize natural sunlight entry.&#xD;&#xA;" base_Class="_k9moYNU6EfCyXKz_9GZJUQ"/>
+  <Requirements:Requirement xmi:id="_lcC34NU6EfCyXKz_9GZJUQ" base_NamedElement="_lb_0kNU6EfCyXKz_9GZJUQ" id="R-2" text="When the natural light level, at it's maximum, is measured below the user-&#xD;&#xA;" base_Class="_lb_0kNU6EfCyXKz_9GZJUQ"/>
+  <Requirements:Requirement xmi:id="_lztJ8NU6EfCyXKz_9GZJUQ" base_NamedElement="_lzqGoNU6EfCyXKz_9GZJUQ" id="R-3" text="While the system is in Automatic Mode, the ACCS shall modulate the smart heater output to maintain the office temperature within user preferences.&#xD;&#xA;" base_Class="_lzqGoNU6EfCyXKz_9GZJUQ"/>
+  <Requirements:Requirement xmi:id="_mJUNkNU6EfCyXKz_9GZJUQ" base_NamedElement="_mJRxUNU6EfCyXKz_9GZJUQ" id="R-4" text="When the Occupant inputs configuration changes via the User Interface, the ACCS shall store the new preferences for lighting and temperature." base_Class="_mJRxUNU6EfCyXKz_9GZJUQ"/>
+  <Requirements:Requirement xmi:id="_mgtZ4NU6EfCyXKz_9GZJUQ" base_NamedElement="_mgrksNU6EfCyXKz_9GZJUQ" id="R-5" text="When a manual command is received for a specific device (Blinds/Lights/Heater), the ACCS shall override the automatic control and execute the requested status change.&#xD;&#xA;" base_Class="_mgrksNU6EfCyXKz_9GZJUQ"/>
+  <Requirements:Requirement xmi:id="_m299wNU6EfCyXKz_9GZJUQ" base_NamedElement="_m28IkNU6EfCyXKz_9GZJUQ" id="R-6" text="If the measured environmental parameters deviate from the current system configuration target values for a defined duration, the ACCS shall display a warning message on the User Interface. " base_Class="_m28IkNU6EfCyXKz_9GZJUQ"/>
+  <Blocks:Block xmi:id="_sCG6ANVHEfCyXKz_9GZJUQ" base_Class="_sBDxINVHEfCyXKz_9GZJUQ"/>
+  <Blocks:Block xmi:id="__x3pMNVHEfCyXKz_9GZJUQ" base_Class="__x1M8NVHEfCyXKz_9GZJUQ"/>
+  <Blocks:Block xmi:id="_SKQVwNVIEfC_Rfi3HLrZWg" base_Class="_SKEIgNVIEfC_Rfi3HLrZWg"/>
+  <Blocks:Block xmi:id="_T1DDoNVIEfC_Rfi3HLrZWg" base_Class="_T09kENVIEfC_Rfi3HLrZWg"/>
+  <Blocks:Block xmi:id="_Vf2_oNVIEfC_Rfi3HLrZWg" base_Class="_VfyHINVIEfC_Rfi3HLrZWg"/>
+  <PortsAndFlows:ItemFlow xmi:id="_ouJZcNVIEfC_Rfi3HLrZWg" base_InformationFlow="_ouFIANVIEfC_Rfi3HLrZWg"/>
+  <PortsAndFlows:ItemFlow xmi:id="_pgjt0NVIEfC_Rfi3HLrZWg" base_InformationFlow="_pggDcNVIEfC_Rfi3HLrZWg"/>
+  <PortsAndFlows:ItemFlow xmi:id="_KPcl4NVJEfC_Rfi3HLrZWg" base_InformationFlow="_KPaJoNVJEfC_Rfi3HLrZWg"/>
+  <PortsAndFlows:ItemFlow xmi:id="_VizwgNVJEfC_Rfi3HLrZWg" base_InformationFlow="_ViwtMNVJEfC_Rfi3HLrZWg"/>
+</xmi:XMI>
