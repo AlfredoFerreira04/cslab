@@ -1,5 +1,19 @@
 # CSLAB - First Submission
 
+- [Requirement Specification](#requirement-specification)
+  - [Black Box](#black-box)
+    - [Requirements](#requirements)
+    - [System Context](#system-context)
+    - [Use Cases](#use-cases)
+      - [Activity Diagrams](#activity-diagrams)
+  - [White Box](#white-box)
+    - [Functional Decomposition](#functional-decomposition)
+    - [Conceptual Interfaces](#conceptual-interfaces)
+    - [Conceptual Subsystems](#conceptual-subsystems)
+  - [Hazard Analysis](#hazard-analysis)
+- [Selected Technology](#selected-technology)
+- [Physical Sensor/Actuators](#physical-sensoractuators)
+
 ## Requirement Specification
 
 ### Black Box
@@ -17,15 +31,29 @@
 
 #### System Context
 
-* Components:
-  * Automated Climate Control System (ACCS) [System of Interest]
-  * Occupant
-  * Physical Environment
-  * Maintenance Services
+- Components:
+  - Automated Climate Control System (ACCS) [System of Interest]
+  - Occupant
+  - Physical Environment
+  - Maintenance Services
 
-![CISTER Office Environment](./diagrams/system-context.png)
+![System Context](./diagrams/system-context.png)
 
 #### Use Cases
+
+![Use Cases](./diagrams/use-cases.png)
+
+##### Activity Diagrams
+
+- UC - Regulate Light Level
+
+//TODO
+
+- UC - Regulate Temperature Level
+
+//TODO
+
+- UC - Override System Configuration
 
 //TODO
 
@@ -44,6 +72,17 @@
 #### Conceptual Subsystems
 
 //TODO
+
+### Hazard Analysis
+
+| **Hazard** | **Mitigation** |
+|-----------|----------------|
+| One of the smart heater actuators is malfunctioning | Identify the failure, provide user with a temporary fix (regulate by hand), and initiate a long-term fix (send message to maintenance services). |
+| The smart blind actuator is stuck in the "closed" position during the day. | Detect discrepancy between command and state. Notify the occupant to manually adjust the blind and send a message to maintenance services. |
+| The smart light actuator fails to switch OFF (stuck ON). | Detect continuous energy usage or light input when not requested. Notify the user to manually switch off the switch and send a message to maintenance services. |
+| The smart light actuator fails to switch ON (bulb/circuit failure). | Detect lack of change in light intensity after command. Notify the user, suggest using natural light, and send a message to maintenance services. |
+| The temperature sensor is malfunctioning | Implement Dual-Sensor Redundancy and Range Validation. Each sensor is checked against a realistic range. If both are valid, compare them. If the difference exceeds a threshold, disable automation, notify the occupant, and send a message to maintenance services. |
+| The light sensor is malfunctioning | Implement Dual-Sensor Redundancy and Range Validation. Each sensor is checked against a realistic range. If both are valid, compare them. If the difference exceeds a threshold, disable automation, notify the occupant, and send a message to maintenance services. |
 
 ## Selected Technology
 
