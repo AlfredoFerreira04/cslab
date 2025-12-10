@@ -1,18 +1,19 @@
 # CSLAB - First Submission
 
-- [Requirement Specification](#requirement-specification)
-  - [Black Box](#black-box)
-    - [Requirements](#requirements)
-    - [System Context](#system-context)
-    - [Use Cases](#use-cases)
-      - [Activity Diagrams](#activity-diagrams)
-  - [White Box](#white-box)
-    - [Functional Decomposition](#functional-decomposition)
-    - [Conceptual Interfaces](#conceptual-interfaces)
-    - [Conceptual Subsystems](#conceptual-subsystems)
-  - [Hazard Analysis](#hazard-analysis)
-- [Selected Technology](#selected-technology)
-- [Physical Sensor/Actuators](#physical-sensoractuators)
+- [CSLAB - First Submission](#cslab---first-submission)
+  - [Requirement Specification](#requirement-specification)
+    - [Black Box](#black-box)
+      - [Requirements](#requirements)
+      - [System Context](#system-context)
+      - [Use Cases](#use-cases)
+        - [Activity Diagrams](#activity-diagrams)
+    - [White Box](#white-box)
+      - [Functional Decomposition](#functional-decomposition)
+      - [Conceptual Interfaces](#conceptual-interfaces)
+      - [Conceptual Subsystems](#conceptual-subsystems)
+    - [Hazard Analysis](#hazard-analysis)
+  - [Selected Technology](#selected-technology)
+  - [Physical Sensor/Actuators](#physical-sensoractuators)
 
 ## Requirement Specification
 
@@ -20,14 +21,14 @@
 
 #### Requirements
 
-| REQ. ID | TITLE | DESCRIPTION |
-| :--- | :--- | :--- |
-| **1** | **Automatic Natural Light Optimization** | While the system is in Automatic Mode, the ACCS shall adjust the smart blinds to the open position to maximize natural sunlight entry. |
-| **2** | **Artificial Light Compensation** | When the natural light level, at its maximum, is measured below the user-defined threshold, the ACCS shall activate the artificial smart lights to compensate. |
-| **3** | **Automatic Temperature Regulation** | While the system is in Automatic Mode, the ACCS shall modulate the smart heater output to maintain the office temperature within user preferences. |
-| **4** | **User Preference Configuration** | When the Occupant inputs configuration changes via the User Interface, the ACCS shall store the new preferences for lighting and temperature. |
-| **5** | **Manual Override Control** | When a manual command is received for a specific device (Blinds/Lights/Heater), the ACCS shall override the automatic control and execute the requested status change. |
-| **6** | **Performance Deviation Alert** | If the measured environmental parameters deviate from the current system configuration target values for a defined duration, the ACCS shall display a warning message on the User Interface. |
+| REQ. ID | TITLE                           | DESCRIPTION                                                                                                                                                     |
+|--------|----------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1      | Automatic Natural Light Optimization | While the system is in Automatic Mode, the ACCS shall adjust the smart blinds to the fully open position to maximize natural sunlight entry.                    |
+| 2      | Artificial Light Compensation     | When the blinds are fully open and natural light level is measured below the user-defined threshold, the ACCS shall activate the artificial smart lights to achieve user-defined light preferences. |
+| 3      | Automatic Temperature Regulation  | While the system is in Automatic Mode, the ACCS shall regulate the smart heater output to maintain the office temperature within the user-defined temperature preferences. |
+| 4      | User Preference Configuration     | When the Occupant inputs configuration changes via the User Interface, the ACCS shall store the new preferences for lighting and temperature.                   |
+| 5      | Manual Override Control           | When a manual command is received for a specific device (Blinds/Lights/Heater), the ACCS shall suspend automatic control for that device and adjust it to the user-requested value. |
+| 6      | Performance Deviation Alert       | If the measured environmental parameters (light/temperature) deviate from the current system configuration target values for 1 minute, the ACCS shall display a warning message on the User Interface. |
 
 #### System Context
 
