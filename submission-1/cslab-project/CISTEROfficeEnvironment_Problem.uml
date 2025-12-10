@@ -18,7 +18,7 @@
           <packagedElement xmi:type="uml:Class" xmi:id="_k9moYNU6EfCyXKz_9GZJUQ" name="Automatic Natural Light Optimization"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_SL6rANU6EfCyXKz_9GZJUQ" name="2 System Context">
-          <packagedElement xmi:type="uml:Class" xmi:id="_sBDxINVHEfCyXKz_9GZJUQ" name="CISTER Office Environment">
+          <packagedElement xmi:type="uml:Class" xmi:id="_sBDxINVHEfCyXKz_9GZJUQ" name="Smart Lighting and Heating System">
             <ownedComment xmi:type="uml:Comment" xmi:id="_S4OkINVKEfC_Rfi3HLrZWg" annotatedElement="_9w5P8NVHEfCyXKz_9GZJUQ _QjsnoNVIEfC_Rfi3HLrZWg">
               <body>Occupant inputs lighting and temperature preferences.&#xD;
 </body>
