@@ -18,7 +18,7 @@
           <packagedElement xmi:type="uml:Class" xmi:id="_k9moYNU6EfCyXKz_9GZJUQ" name="Automatic Natural Light Optimization"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_SL6rANU6EfCyXKz_9GZJUQ" name="2 System Context">
-          <packagedElement xmi:type="uml:Class" xmi:id="_sBDxINVHEfCyXKz_9GZJUQ" name="Smart Lighting and Heating System">
+          <packagedElement xmi:type="uml:Class" xmi:id="_sBDxINVHEfCyXKz_9GZJUQ" name="Smart Lighting and Heating System" useCase="_tCWO8NYLEfCOaftQeLUQ7A _0x8-8NYLEfCOaftQeLUQ7A _2mHEMNYLEfCOaftQeLUQ7A _4-oawNYLEfCOaftQeLUQ7A _-KFzANYLEfCOaftQeLUQ7A _CoppANYMEfCOaftQeLUQ7A _GlFpYNYMEfCOaftQeLUQ7A _JorWMNYMEfCOaftQeLUQ7A _O-VMQNYMEfCOaftQeLUQ7A">
             <ownedComment xmi:type="uml:Comment" xmi:id="_S4OkINVKEfC_Rfi3HLrZWg" annotatedElement="_9w5P8NVHEfCyXKz_9GZJUQ _QjsnoNVIEfC_Rfi3HLrZWg">
               <body>Occupant inputs lighting and temperature preferences.&#xD;
 </body>
@@ -27,6 +27,15 @@
               <body>Occupant manually inputs lighting and temperature system configuration.&#xD;
 </body>
             </ownedComment>
+            <ownedUseCase xmi:type="uml:UseCase" xmi:id="_tCWO8NYLEfCOaftQeLUQ7A" name="Configure System Preferences" subject="_sBDxINVHEfCyXKz_9GZJUQ"/>
+            <ownedUseCase xmi:type="uml:UseCase" xmi:id="_0x8-8NYLEfCOaftQeLUQ7A" name="Override system configuration" subject="_sBDxINVHEfCyXKz_9GZJUQ"/>
+            <ownedUseCase xmi:type="uml:UseCase" xmi:id="_2mHEMNYLEfCOaftQeLUQ7A" name="View alert messages" subject="_sBDxINVHEfCyXKz_9GZJUQ"/>
+            <ownedUseCase xmi:type="uml:UseCase" xmi:id="_4-oawNYLEfCOaftQeLUQ7A" name="Regulate Light level" subject="_sBDxINVHEfCyXKz_9GZJUQ"/>
+            <ownedUseCase xmi:type="uml:UseCase" xmi:id="_-KFzANYLEfCOaftQeLUQ7A" name="Regulate Temperature Level" subject="_sBDxINVHEfCyXKz_9GZJUQ"/>
+            <ownedUseCase xmi:type="uml:UseCase" xmi:id="_CoppANYMEfCOaftQeLUQ7A" name="Store Occupant Preferences" subject="_sBDxINVHEfCyXKz_9GZJUQ"/>
+            <ownedUseCase xmi:type="uml:UseCase" xmi:id="_GlFpYNYMEfCOaftQeLUQ7A" name="Monitor system configuration deviations " subject="_sBDxINVHEfCyXKz_9GZJUQ"/>
+            <ownedUseCase xmi:type="uml:UseCase" xmi:id="_JorWMNYMEfCOaftQeLUQ7A" name="Send alert messages" subject="_sBDxINVHEfCyXKz_9GZJUQ"/>
+            <ownedUseCase xmi:type="uml:UseCase" xmi:id="_O-VMQNYMEfCOaftQeLUQ7A" name="Receives malfunctioning alert messages" subject="_sBDxINVHEfCyXKz_9GZJUQ"/>
             <ownedAttribute xmi:type="uml:Property" xmi:id="_9w5P8NVHEfCyXKz_9GZJUQ" name="Property1" type="__x1M8NVHEfCyXKz_9GZJUQ" aggregation="composite"/>
             <ownedAttribute xmi:type="uml:Property" xmi:id="_QjsnoNVIEfC_Rfi3HLrZWg" name="Property2" type="_SKEIgNVIEfC_Rfi3HLrZWg" aggregation="composite"/>
             <ownedAttribute xmi:type="uml:Property" xmi:id="_TS6m8NVIEfC_Rfi3HLrZWg" name="Property3" type="_T09kENVIEfC_Rfi3HLrZWg" aggregation="composite"/>
@@ -41,7 +50,71 @@
           <packagedElement xmi:type="uml:InformationFlow" xmi:id="_KPaJoNVJEfC_Rfi3HLrZWg" name="notifies" informationSource="_9w5P8NVHEfCyXKz_9GZJUQ" informationTarget="_VBtrENVIEfC_Rfi3HLrZWg"/>
           <packagedElement xmi:type="uml:InformationFlow" xmi:id="_ViwtMNVJEfC_Rfi3HLrZWg" name="regulates" informationSource="_9w5P8NVHEfCyXKz_9GZJUQ" informationTarget="_TS6m8NVIEfC_Rfi3HLrZWg"/>
         </packagedElement>
-        <packagedElement xmi:type="uml:Package" xmi:id="_VRwakNU6EfCyXKz_9GZJUQ" name="3 Use Cases"/>
+        <packagedElement xmi:type="uml:Package" xmi:id="_VRwakNU6EfCyXKz_9GZJUQ" name="3 Use Cases">
+          <packagedElement xmi:type="uml:Association" xmi:id="_U4W6sNYMEfCOaftQeLUQ7A" memberEnd="_U4alENYMEfCOaftQeLUQ7A _U4bMINYMEfCOaftQeLUQ7A">
+            <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_U4Z-ANYMEfCOaftQeLUQ7A" source="org.eclipse.papyrus">
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_U4Z-AdYMEfCOaftQeLUQ7A" key="nature" value="UML_Nature"/>
+            </eAnnotations>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_U4alENYMEfCOaftQeLUQ7A" name="maintenance services" type="_VfyHINVIEfC_Rfi3HLrZWg" association="_U4W6sNYMEfCOaftQeLUQ7A"/>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_U4bMINYMEfCOaftQeLUQ7A" name="receives malfunctioning alert messages" type="_O-VMQNYMEfCOaftQeLUQ7A" association="_U4W6sNYMEfCOaftQeLUQ7A"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_Vs7LMNYMEfCOaftQeLUQ7A" memberEnd="_Vs8ZUtYMEfCOaftQeLUQ7A _Vs9AYNYMEfCOaftQeLUQ7A">
+            <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Vs8ZUNYMEfCOaftQeLUQ7A" source="org.eclipse.papyrus">
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Vs8ZUdYMEfCOaftQeLUQ7A" key="nature" value="UML_Nature"/>
+            </eAnnotations>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_Vs8ZUtYMEfCOaftQeLUQ7A" name="automated climate control system" type="__x1M8NVHEfCyXKz_9GZJUQ" association="_Vs7LMNYMEfCOaftQeLUQ7A"/>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_Vs9AYNYMEfCOaftQeLUQ7A" name="send alert messages" type="_JorWMNYMEfCOaftQeLUQ7A" association="_Vs7LMNYMEfCOaftQeLUQ7A"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_XSqZ8NYMEfCOaftQeLUQ7A" memberEnd="_XSroEtYMEfCOaftQeLUQ7A _XSsPINYMEfCOaftQeLUQ7A">
+            <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_XSroENYMEfCOaftQeLUQ7A" source="org.eclipse.papyrus">
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_XSroEdYMEfCOaftQeLUQ7A" key="nature" value="UML_Nature"/>
+            </eAnnotations>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_XSroEtYMEfCOaftQeLUQ7A" name="automated climate control system" type="__x1M8NVHEfCyXKz_9GZJUQ" association="_XSqZ8NYMEfCOaftQeLUQ7A"/>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_XSsPINYMEfCOaftQeLUQ7A" name="monitor system configuration deviations " type="_GlFpYNYMEfCOaftQeLUQ7A" association="_XSqZ8NYMEfCOaftQeLUQ7A"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_Yp4rkNYMEfCOaftQeLUQ7A" memberEnd="_Yp5SotYMEfCOaftQeLUQ7A _Yp5So9YMEfCOaftQeLUQ7A">
+            <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Yp5SoNYMEfCOaftQeLUQ7A" source="org.eclipse.papyrus">
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Yp5SodYMEfCOaftQeLUQ7A" key="nature" value="UML_Nature"/>
+            </eAnnotations>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_Yp5SotYMEfCOaftQeLUQ7A" name="automated climate control system" type="__x1M8NVHEfCyXKz_9GZJUQ" association="_Yp4rkNYMEfCOaftQeLUQ7A"/>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_Yp5So9YMEfCOaftQeLUQ7A" name="store occupant preferences" type="_CoppANYMEfCOaftQeLUQ7A" association="_Yp4rkNYMEfCOaftQeLUQ7A"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_Zank8NYMEfCOaftQeLUQ7A" memberEnd="_ZaoMAtYMEfCOaftQeLUQ7A _ZaoMA9YMEfCOaftQeLUQ7A">
+            <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ZaoMANYMEfCOaftQeLUQ7A" source="org.eclipse.papyrus">
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ZaoMAdYMEfCOaftQeLUQ7A" key="nature" value="UML_Nature"/>
+            </eAnnotations>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_ZaoMAtYMEfCOaftQeLUQ7A" name="automated climate control system" type="__x1M8NVHEfCyXKz_9GZJUQ" association="_Zank8NYMEfCOaftQeLUQ7A"/>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_ZaoMA9YMEfCOaftQeLUQ7A" name="regulate temperature level" type="_-KFzANYLEfCOaftQeLUQ7A" association="_Zank8NYMEfCOaftQeLUQ7A"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_bvw3YNYMEfCOaftQeLUQ7A" memberEnd="_bvyFgtYMEfCOaftQeLUQ7A _bvyFg9YMEfCOaftQeLUQ7A">
+            <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_bvyFgNYMEfCOaftQeLUQ7A" source="org.eclipse.papyrus">
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_bvyFgdYMEfCOaftQeLUQ7A" key="nature" value="UML_Nature"/>
+            </eAnnotations>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_bvyFgtYMEfCOaftQeLUQ7A" name="automated climate control system" type="__x1M8NVHEfCyXKz_9GZJUQ" association="_bvw3YNYMEfCOaftQeLUQ7A"/>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_bvyFg9YMEfCOaftQeLUQ7A" name="regulate light level" type="_4-oawNYLEfCOaftQeLUQ7A" association="_bvw3YNYMEfCOaftQeLUQ7A"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_c0nmoNYMEfCOaftQeLUQ7A" memberEnd="_c0oNstYMEfCOaftQeLUQ7A _c0oNs9YMEfCOaftQeLUQ7A">
+            <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_c0oNsNYMEfCOaftQeLUQ7A" source="org.eclipse.papyrus">
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_c0oNsdYMEfCOaftQeLUQ7A" key="nature" value="UML_Nature"/>
+            </eAnnotations>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_c0oNstYMEfCOaftQeLUQ7A" name="occupant" type="_SKEIgNVIEfC_Rfi3HLrZWg" association="_c0nmoNYMEfCOaftQeLUQ7A"/>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_c0oNs9YMEfCOaftQeLUQ7A" name="view warning and alert messages" type="_2mHEMNYLEfCOaftQeLUQ7A" association="_c0nmoNYMEfCOaftQeLUQ7A"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_eNv8wNYMEfCOaftQeLUQ7A" memberEnd="_eNwj0tYMEfCOaftQeLUQ7A _eNwj09YMEfCOaftQeLUQ7A">
+            <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_eNwj0NYMEfCOaftQeLUQ7A" source="org.eclipse.papyrus">
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_eNwj0dYMEfCOaftQeLUQ7A" key="nature" value="UML_Nature"/>
+            </eAnnotations>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_eNwj0tYMEfCOaftQeLUQ7A" name="occupant" type="_SKEIgNVIEfC_Rfi3HLrZWg" association="_eNv8wNYMEfCOaftQeLUQ7A"/>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_eNwj09YMEfCOaftQeLUQ7A" name="override system configuration" type="_0x8-8NYLEfCOaftQeLUQ7A" association="_eNv8wNYMEfCOaftQeLUQ7A"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_fCGK0NYMEfCOaftQeLUQ7A" memberEnd="_fCGx4tYMEfCOaftQeLUQ7A _fCHY8NYMEfCOaftQeLUQ7A">
+            <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_fCGx4NYMEfCOaftQeLUQ7A" source="org.eclipse.papyrus">
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_fCGx4dYMEfCOaftQeLUQ7A" key="nature" value="UML_Nature"/>
+            </eAnnotations>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_fCGx4tYMEfCOaftQeLUQ7A" name="occupant" type="_SKEIgNVIEfC_Rfi3HLrZWg" association="_fCGK0NYMEfCOaftQeLUQ7A"/>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_fCHY8NYMEfCOaftQeLUQ7A" name="configure system preferences" type="_tCWO8NYLEfCOaftQeLUQ7A" association="_fCGK0NYMEfCOaftQeLUQ7A"/>
+          </packagedElement>
+        </packagedElement>
       </packagedElement>
       <packagedElement xmi:type="uml:Package" xmi:id="_FVRvwNU6EfCyXKz_9GZJUQ" name="2 White Box">
         <packagedElement xmi:type="uml:Package" xmi:id="_YO2d0NU6EfCyXKz_9GZJUQ" name="1 Functional Decomposition"/>
