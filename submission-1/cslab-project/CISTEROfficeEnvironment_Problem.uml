@@ -198,7 +198,7 @@
       <packagedElement xmi:type="uml:Package" xmi:id="_FVRvwNU6EfCyXKz_9GZJUQ" name="2 White Box">
         <packagedElement xmi:type="uml:Package" xmi:id="_YO2d0NU6EfCyXKz_9GZJUQ" name="1 Functional Decomposition"/>
         <packagedElement xmi:type="uml:Package" xmi:id="_c4WYgNU6EfCyXKz_9GZJUQ" name="2 Conceptual Interfaces">
-          <packagedElement xmi:type="uml:Class" xmi:id="_C2mVsNYdEfCfpP0K4_3HNA" name="Smart Lighting and Heating System">
+          <packagedElement xmi:type="uml:Class" xmi:id="_C2mVsNYdEfCfpP0K4_3HNA" name="Automated Climate Control System">
             <ownedAttribute xmi:type="uml:Port" xmi:id="_M2f34NYeEfCfpP0K4_3HNA" name="Temperature Sensor Data" aggregation="composite"/>
             <ownedAttribute xmi:type="uml:Port" xmi:id="_UAsNsNYeEfCfpP0K4_3HNA" name="Light Sensor Data" aggregation="composite"/>
             <ownedAttribute xmi:type="uml:Port" xmi:id="_hujr4NYeEfCfpP0K4_3HNA" name="Heater Updates" aggregation="composite"/>
