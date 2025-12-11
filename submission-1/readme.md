@@ -1,19 +1,18 @@
 # CSLAB - First Submission
 
-- [CSLAB - First Submission](#cslab---first-submission)
-  - [Requirement Specification](#requirement-specification)
-    - [Black Box](#black-box)
-      - [Requirements](#requirements)
-      - [System Context](#system-context)
-      - [Use Cases](#use-cases)
-        - [Activity Diagrams](#activity-diagrams)
-    - [White Box](#white-box)
-      - [Functional Decomposition](#functional-decomposition)
-      - [Conceptual Interfaces](#conceptual-interfaces)
-      - [Conceptual Subsystems](#conceptual-subsystems)
-    - [Hazard Analysis](#hazard-analysis)
-  - [Selected Technology](#selected-technology)
-  - [Physical Sensor/Actuators](#physical-sensoractuators)
+- [Requirement Specification](#requirement-specification)
+  - [Black Box](#black-box)
+    - [Requirements](#requirements)
+    - [System Context](#system-context)
+    - [Use Cases](#use-cases)
+      - [Activity Diagrams](#activity-diagrams)
+  - [White Box](#white-box)
+    - [Conceptual Interfaces](#conceptual-interfaces)
+    - [Conceptual Subsystems](#conceptual-subsystems)
+  - [Traceability](#traceability)
+  - [Hazard Analysis](#hazard-analysis)
+- [Selected Technology](#selected-technology)
+- [Physical Sensor/Actuators](#physical-sensoractuators)
 
 ## Requirement Specification
 
@@ -48,29 +47,25 @@
 
 - UC - Regulate Light Level
 
-//TODO
+![Use Cases](./diagrams/activity-diagram-regulate-light-level.png)
 
 - UC - Regulate Temperature Level
 
-//TODO
-
-- UC - Override System Configuration
-
-//TODO
+![Use Cases](./diagrams/activity-diagram-regulate-temperature-level.png)
 
 ---
 
 ### White Box
 
-#### Functional Decomposition
-
-//TODO
-
 #### Conceptual Interfaces
 
-//TODO
+![Conceptual Interfaces](./diagrams/conceptual-interfaces.png)
 
 #### Conceptual Subsystems
+
+![Conceptual Subsystems](./diagrams/conceptual-subsystems.png)
+
+### Traceability
 
 //TODO
 
