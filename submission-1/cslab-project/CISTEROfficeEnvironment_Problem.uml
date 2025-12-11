@@ -119,7 +119,97 @@
       <packagedElement xmi:type="uml:Package" xmi:id="_FVRvwNU6EfCyXKz_9GZJUQ" name="2 White Box">
         <packagedElement xmi:type="uml:Package" xmi:id="_YO2d0NU6EfCyXKz_9GZJUQ" name="1 Functional Decomposition"/>
         <packagedElement xmi:type="uml:Package" xmi:id="_cyoLANU6EfCyXKz_9GZJUQ" name="2 Conceptual Interfaces"/>
-        <packagedElement xmi:type="uml:Package" xmi:id="_c4WYgNU6EfCyXKz_9GZJUQ" name="3 Conceptual Subsystems"/>
+        <packagedElement xmi:type="uml:Package" xmi:id="_c4WYgNU6EfCyXKz_9GZJUQ" name="3 Conceptual Subsystems">
+          <packagedElement xmi:type="uml:Class" xmi:id="_C2mVsNYdEfCfpP0K4_3HNA" name="Smart Lighting and Heating System">
+            <ownedAttribute xmi:type="uml:Port" xmi:id="_M2f34NYeEfCfpP0K4_3HNA" name="Temperature Sensor Data" aggregation="composite"/>
+            <ownedAttribute xmi:type="uml:Port" xmi:id="_UAsNsNYeEfCfpP0K4_3HNA" name="Light Sensor Data" aggregation="composite"/>
+            <ownedAttribute xmi:type="uml:Port" xmi:id="_hujr4NYeEfCfpP0K4_3HNA" name="Heater Updates" aggregation="composite"/>
+            <ownedAttribute xmi:type="uml:Port" xmi:id="_u97QMNYeEfCfpP0K4_3HNA" name="Blinds Updates" aggregation="composite"/>
+            <ownedAttribute xmi:type="uml:Port" xmi:id="_yOYUUNYeEfCfpP0K4_3HNA" name="Artificial Light Updates" aggregation="composite"/>
+            <ownedAttribute xmi:type="uml:Port" xmi:id="_OzU44NaKEfColb2hkayOKw" name="User Input" aggregation="composite"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_34jo4NYeEfCfpP0K4_3HNA" name="Temperature Sensor Data" visibility="package">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_Ie6-MNYfEfCfpP0K4_3HNA" name="Current Temperature" visibility="public"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_X9flANYfEfCfpP0K4_3HNA" name="Light Sensor Data">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_aNaZMNYfEfCfpP0K4_3HNA" name="Current Light level" visibility="public"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_ly0WENYfEfCfpP0K4_3HNA" name="Heater Updates">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_o-irMNYfEfCfpP0K4_3HNA" name="New Temperature" visibility="public"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_AQzQwNYgEfCfpP0K4_3HNA" name="Blinds Updates">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_C3tooNYgEfCfpP0K4_3HNA" name="New Blinds Position" visibility="public"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_JdEMANYgEfCfpP0K4_3HNA" name="Artificial Light Updates">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_LhAZsNYgEfCfpP0K4_3HNA" name="New Light Level" visibility="public"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Package" xmi:id="_pIjtYNYgEfCfpP0K4_3HNA" name="Light Control Subsystem">
+            <packagedElement xmi:type="uml:Class" xmi:id="_EOUWkNYdEfCfpP0K4_3HNA" name="Light Control">
+              <ownedAttribute xmi:type="uml:Port" xmi:id="_LN3l0NYhEfCfpP0K4_3HNA" name="Light Sensor Data" aggregation="composite"/>
+              <ownedAttribute xmi:type="uml:Port" xmi:id="_cX3zsNYhEfCfpP0K4_3HNA" name="Blinds Updates" aggregation="composite"/>
+              <ownedAttribute xmi:type="uml:Port" xmi:id="_cX3zsdYhEfCfpP0K4_3HNA" name="Artificial Light Updates" aggregation="composite"/>
+              <ownedAttribute xmi:type="uml:Port" xmi:id="_0VwwMNYhEfCfpP0K4_3HNA" name="Output Information" aggregation="composite"/>
+              <ownedAttribute xmi:type="uml:Port" xmi:id="_bghhENaGEfColb2hkayOKw" name="Information Input" aggregation="composite"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_6N194NYhEfCfpP0K4_3HNA" name="Light Sensor Data">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_MLNiYNYiEfCfpP0K4_3HNA" name="Current Light level" visibility="public"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_9gCHYNYhEfCfpP0K4_3HNA" name="Artificial Light Updates">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_OQCg4NYiEfCfpP0K4_3HNA" name="New Light Level" visibility="public"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="__ZMBYNYhEfCfpP0K4_3HNA" name="Output Information">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_wgAywNaGEfColb2hkayOKw" name="Reading Information" visibility="public"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_AvqsINYiEfCfpP0K4_3HNA" name="Blinds Updates">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_NEFrINYiEfCfpP0K4_3HNA" name="New Blinds Position" visibility="public"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_lArBoNaGEfColb2hkayOKw" name="Information Input">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_795LUNaGEfColb2hkayOKw" name="Control Information" visibility="public"/>
+            </packagedElement>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Package" xmi:id="_qxDVMNYgEfCfpP0K4_3HNA" name="Heating Control Subsystem">
+            <packagedElement xmi:type="uml:Class" xmi:id="_G15c0NYdEfCfpP0K4_3HNA" name="Heating Control">
+              <ownedAttribute xmi:type="uml:Port" xmi:id="_52BDYNaHEfColb2hkayOKw" name="Temperature Sensor Data" aggregation="composite"/>
+              <ownedAttribute xmi:type="uml:Port" xmi:id="_52BqcNaHEfColb2hkayOKw" name="Heater Updates" aggregation="composite"/>
+              <ownedAttribute xmi:type="uml:Port" xmi:id="_6ybBQNaHEfColb2hkayOKw" name=" Information Output" aggregation="composite"/>
+              <ownedAttribute xmi:type="uml:Port" xmi:id="_6yboUNaHEfColb2hkayOKw" name="Information Input" aggregation="composite"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_3J6pgNaHEfColb2hkayOKw" name="Temperature Sensor Data" visibility="package">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_3J6pgdaHEfColb2hkayOKw" name="Current Temperature" visibility="public"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_3J6pgtaHEfColb2hkayOKw" name="Heater Updates">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_3J6pg9aHEfColb2hkayOKw" name="New Temperature" visibility="public"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_3J6phNaHEfColb2hkayOKw" name="Information Output">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_3J6phdaHEfColb2hkayOKw" name="Reading Information" visibility="public"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_3J7QkNaHEfColb2hkayOKw" name="Information Input">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_3J7QkdaHEfColb2hkayOKw" name="Control Information" visibility="public"/>
+            </packagedElement>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Package" xmi:id="_B-FEwNaKEfColb2hkayOKw" name="Office Control Subsystem">
+            <packagedElement xmi:type="uml:Class" xmi:id="_iQh4cNaKEfColb2hkayOKw" name="Office Control Unit">
+              <ownedAttribute xmi:type="uml:Port" xmi:id="_oojxgNaKEfColb2hkayOKw" name="User Input" aggregation="composite"/>
+              <ownedAttribute xmi:type="uml:Port" xmi:id="_4VinwNaKEfColb2hkayOKw" name="Heating Control Information Output" aggregation="composite"/>
+              <ownedAttribute xmi:type="uml:Port" xmi:id="_7gWW4NaKEfColb2hkayOKw" name="Light Control Information Output" aggregation="composite"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_-uFeMNaKEfColb2hkayOKw" name="Heating Control Information Input">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_cpkagNaLEfColb2hkayOKw" name="Heating Configuration" visibility="public"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_CTyZkNaLEfColb2hkayOKw" name="User Input">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_CTyZkdaLEfColb2hkayOKw" name="System Configuration Data" visibility="public"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_QwON8NaLEfColb2hkayOKw" name="Light Control Information Output">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_qNTsUNaLEfColb2hkayOKw" name="Light Configuration" visibility="public"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_RCGoINaLEfColb2hkayOKw" name="User Input">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_RCGoIdaLEfColb2hkayOKw" name="System Configuration Data" visibility="public"/>
+            </packagedElement>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_SPQNMNaKEfColb2hkayOKw" name="User Input">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_U_C0QNaKEfColb2hkayOKw" name="System Configuration Data" visibility="public"/>
+          </packagedElement>
+        </packagedElement>
       </packagedElement>
     </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_znHr8NU5EfCyXKz_9GZJUQ">
@@ -182,6 +272,12 @@
       </eAnnotations>
       <appliedProfile xmi:type="uml:Profile" href="pathmap://UML_PROFILES/Standard.profile.uml#_0"/>
     </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_EYxoMNYfEfCfpP0K4_3HNA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_EYzdYNYfEfCfpP0K4_3HNA" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#_Kv8EIKFXEeS_KNX0nfvIVQ"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#ActionLanguage"/>
+    </profileApplication>
   </uml:Model>
   <Requirements:Requirement xmi:id="_k9tWENU6EfCyXKz_9GZJUQ" base_NamedElement="_k9moYNU6EfCyXKz_9GZJUQ" id="R-1" text="While the system is in Automatic Mode, the ACCS shall adjust the smart blinds to the fully open position to maximize natural sunlight entry." base_Class="_k9moYNU6EfCyXKz_9GZJUQ"/>
   <Requirements:Requirement xmi:id="_lcC34NU6EfCyXKz_9GZJUQ" base_NamedElement="_lb_0kNU6EfCyXKz_9GZJUQ" id="R-2" text="When the blinds are fully open and natural light level is measured below the user-defined threshold, the ACCS shall activate the artificial smart lights to achieve user-defined light preferences." base_Class="_lb_0kNU6EfCyXKz_9GZJUQ"/>
@@ -198,4 +294,64 @@
   <PortsAndFlows:ItemFlow xmi:id="_pgjt0NVIEfC_Rfi3HLrZWg" base_InformationFlow="_pggDcNVIEfC_Rfi3HLrZWg"/>
   <PortsAndFlows:ItemFlow xmi:id="_KPcl4NVJEfC_Rfi3HLrZWg" base_InformationFlow="_KPaJoNVJEfC_Rfi3HLrZWg"/>
   <PortsAndFlows:ItemFlow xmi:id="_VizwgNVJEfC_Rfi3HLrZWg" base_InformationFlow="_ViwtMNVJEfC_Rfi3HLrZWg"/>
+  <Blocks:Block xmi:id="_C2ox8NYdEfCfpP0K4_3HNA" base_Class="_C2mVsNYdEfCfpP0K4_3HNA"/>
+  <Blocks:Block xmi:id="_EOWLwNYdEfCfpP0K4_3HNA" base_Class="_EOUWkNYdEfCfpP0K4_3HNA"/>
+  <Blocks:Block xmi:id="_G18gINYdEfCfpP0K4_3HNA" base_Class="_G15c0NYdEfCfpP0K4_3HNA"/>
+  <PortsAndFlows:ProxyPort xmi:id="_M2i7MNYeEfCfpP0K4_3HNA" base_Port="_M2f34NYeEfCfpP0K4_3HNA"/>
+  <PortsAndFlows:ProxyPort xmi:id="_UAuC4NYeEfCfpP0K4_3HNA" base_Port="_UAsNsNYeEfCfpP0K4_3HNA"/>
+  <PortsAndFlows:ProxyPort xmi:id="_huk6ANYeEfCfpP0K4_3HNA" base_Port="_hujr4NYeEfCfpP0K4_3HNA"/>
+  <PortsAndFlows:ProxyPort xmi:id="_u98eUNYeEfCfpP0K4_3HNA" base_Port="_u97QMNYeEfCfpP0K4_3HNA"/>
+  <PortsAndFlows:ProxyPort xmi:id="_yOZicNYeEfCfpP0K4_3HNA" base_Port="_yOYUUNYeEfCfpP0K4_3HNA"/>
+  <PortsAndFlows:InterfaceBlock xmi:id="_34leENYeEfCfpP0K4_3HNA" base_Class="_34jo4NYeEfCfpP0K4_3HNA"/>
+  <PortsAndFlows:FlowProperty xmi:id="_Ie8zYNYfEfCfpP0K4_3HNA" base_Property="_Ie6-MNYfEfCfpP0K4_3HNA" direction="in"/>
+  <PortsAndFlows:InterfaceBlock xmi:id="_X9haMNYfEfCfpP0K4_3HNA" base_Class="_X9flANYfEfCfpP0K4_3HNA"/>
+  <PortsAndFlows:FlowProperty xmi:id="_aNcOYNYfEfCfpP0K4_3HNA" base_Property="_aNaZMNYfEfCfpP0K4_3HNA" direction="in"/>
+  <PortsAndFlows:InterfaceBlock xmi:id="_ly2LQNYfEfCfpP0K4_3HNA" base_Class="_ly0WENYfEfCfpP0K4_3HNA"/>
+  <PortsAndFlows:FlowProperty xmi:id="_o-kgYNYfEfCfpP0K4_3HNA" base_Property="_o-irMNYfEfCfpP0K4_3HNA" direction="out"/>
+  <PortsAndFlows:InterfaceBlock xmi:id="_AQ1F8NYgEfCfpP0K4_3HNA" base_Class="_AQzQwNYgEfCfpP0K4_3HNA"/>
+  <PortsAndFlows:FlowProperty xmi:id="_C3u2wNYgEfCfpP0K4_3HNA" base_Property="_C3tooNYgEfCfpP0K4_3HNA" direction="out"/>
+  <PortsAndFlows:InterfaceBlock xmi:id="_JdGBMNYgEfCfpP0K4_3HNA" base_Class="_JdEMANYgEfCfpP0K4_3HNA"/>
+  <PortsAndFlows:FlowProperty xmi:id="_LhAZsdYgEfCfpP0K4_3HNA" base_Property="_LhAZsNYgEfCfpP0K4_3HNA" direction="out"/>
+  <PortsAndFlows:ProxyPort xmi:id="_LN4M4NYhEfCfpP0K4_3HNA" base_Port="_LN3l0NYhEfCfpP0K4_3HNA"/>
+  <PortsAndFlows:ProxyPort xmi:id="_cX3zstYhEfCfpP0K4_3HNA" base_Port="_cX3zsNYhEfCfpP0K4_3HNA"/>
+  <PortsAndFlows:ProxyPort xmi:id="_cX4awNYhEfCfpP0K4_3HNA" base_Port="_cX3zsdYhEfCfpP0K4_3HNA"/>
+  <PortsAndFlows:ProxyPort xmi:id="_0VzMcNYhEfCfpP0K4_3HNA" base_Port="_0VwwMNYhEfCfpP0K4_3HNA"/>
+  <PortsAndFlows:InterfaceBlock xmi:id="_6N3zENYhEfCfpP0K4_3HNA" base_Class="_6N194NYhEfCfpP0K4_3HNA"/>
+  <PortsAndFlows:InterfaceBlock xmi:id="_9gDVgNYhEfCfpP0K4_3HNA" base_Class="_9gCHYNYhEfCfpP0K4_3HNA"/>
+  <PortsAndFlows:InterfaceBlock xmi:id="__ZNPgNYhEfCfpP0K4_3HNA" base_Class="__ZMBYNYhEfCfpP0K4_3HNA"/>
+  <PortsAndFlows:InterfaceBlock xmi:id="_Avr6QNYiEfCfpP0K4_3HNA" base_Class="_AvqsINYiEfCfpP0K4_3HNA"/>
+  <PortsAndFlows:FlowProperty xmi:id="_MLNiYdYiEfCfpP0K4_3HNA" base_Property="_MLNiYNYiEfCfpP0K4_3HNA" direction="in"/>
+  <PortsAndFlows:FlowProperty xmi:id="_NEFrIdYiEfCfpP0K4_3HNA" base_Property="_NEFrINYiEfCfpP0K4_3HNA" direction="out"/>
+  <PortsAndFlows:FlowProperty xmi:id="_OQDH8NYiEfCfpP0K4_3HNA" base_Property="_OQCg4NYiEfCfpP0K4_3HNA" direction="out"/>
+  <PortsAndFlows:ProxyPort xmi:id="_bgkkYNaGEfColb2hkayOKw" base_Port="_bghhENaGEfColb2hkayOKw"/>
+  <PortsAndFlows:InterfaceBlock xmi:id="_lAvTENaGEfColb2hkayOKw" base_Class="_lArBoNaGEfColb2hkayOKw"/>
+  <PortsAndFlows:FlowProperty xmi:id="_wgCn8NaGEfColb2hkayOKw" base_Property="_wgAywNaGEfColb2hkayOKw" direction="out"/>
+  <PortsAndFlows:FlowProperty xmi:id="_797AgNaGEfColb2hkayOKw" base_Property="_795LUNaGEfColb2hkayOKw" direction="in"/>
+  <PortsAndFlows:InterfaceBlock xmi:id="_3J7QktaHEfColb2hkayOKw" base_Class="_3J6pgNaHEfColb2hkayOKw"/>
+  <PortsAndFlows:FlowProperty xmi:id="_3J73oNaHEfColb2hkayOKw" base_Property="_3J6pgdaHEfColb2hkayOKw" direction="in"/>
+  <PortsAndFlows:InterfaceBlock xmi:id="_3J8esNaHEfColb2hkayOKw" base_Class="_3J6pgtaHEfColb2hkayOKw"/>
+  <PortsAndFlows:FlowProperty xmi:id="_3J9FwNaHEfColb2hkayOKw" base_Property="_3J6pg9aHEfColb2hkayOKw" direction="out"/>
+  <PortsAndFlows:InterfaceBlock xmi:id="_3J9FwdaHEfColb2hkayOKw" base_Class="_3J6phNaHEfColb2hkayOKw"/>
+  <PortsAndFlows:FlowProperty xmi:id="_3J9s0NaHEfColb2hkayOKw" base_Property="_3J6phdaHEfColb2hkayOKw" direction="out"/>
+  <PortsAndFlows:InterfaceBlock xmi:id="_3J9s0daHEfColb2hkayOKw" base_Class="_3J7QkNaHEfColb2hkayOKw"/>
+  <PortsAndFlows:FlowProperty xmi:id="_3J-T4NaHEfColb2hkayOKw" base_Property="_3J7QkdaHEfColb2hkayOKw" direction="in"/>
+  <PortsAndFlows:ProxyPort xmi:id="_52BqcdaHEfColb2hkayOKw" base_Port="_52BDYNaHEfColb2hkayOKw"/>
+  <PortsAndFlows:ProxyPort xmi:id="_52C4kNaHEfColb2hkayOKw" base_Port="_52BqcNaHEfColb2hkayOKw"/>
+  <PortsAndFlows:ProxyPort xmi:id="_6yboUdaHEfColb2hkayOKw" base_Port="_6ybBQNaHEfColb2hkayOKw"/>
+  <PortsAndFlows:ProxyPort xmi:id="_6yc2cNaHEfColb2hkayOKw" base_Port="_6yboUNaHEfColb2hkayOKw"/>
+  <PortsAndFlows:ProxyPort xmi:id="_OzWHANaKEfColb2hkayOKw" base_Port="_OzU44NaKEfColb2hkayOKw"/>
+  <PortsAndFlows:InterfaceBlock xmi:id="_SPSCYNaKEfColb2hkayOKw" base_Class="_SPQNMNaKEfColb2hkayOKw"/>
+  <PortsAndFlows:FlowProperty xmi:id="_U_ECYNaKEfColb2hkayOKw" base_Property="_U_C0QNaKEfColb2hkayOKw" direction="in"/>
+  <Blocks:Block xmi:id="_iQjtoNaKEfColb2hkayOKw" base_Class="_iQh4cNaKEfColb2hkayOKw"/>
+  <PortsAndFlows:ProxyPort xmi:id="_ookYkNaKEfColb2hkayOKw" base_Port="_oojxgNaKEfColb2hkayOKw"/>
+  <PortsAndFlows:ProxyPort xmi:id="_4Vkc8NaKEfColb2hkayOKw" base_Port="_4VinwNaKEfColb2hkayOKw"/>
+  <PortsAndFlows:ProxyPort xmi:id="_7gXlANaKEfColb2hkayOKw" base_Port="_7gWW4NaKEfColb2hkayOKw"/>
+  <PortsAndFlows:InterfaceBlock xmi:id="_-uHTYNaKEfColb2hkayOKw" base_Class="_-uFeMNaKEfColb2hkayOKw"/>
+  <PortsAndFlows:InterfaceBlock xmi:id="_CTyZktaLEfColb2hkayOKw" base_Class="_CTyZkNaLEfColb2hkayOKw"/>
+  <PortsAndFlows:FlowProperty xmi:id="_CTznsNaLEfColb2hkayOKw" base_Property="_CTyZkdaLEfColb2hkayOKw" direction="in"/>
+  <PortsAndFlows:InterfaceBlock xmi:id="_QwPcENaLEfColb2hkayOKw" base_Class="_QwON8NaLEfColb2hkayOKw"/>
+  <PortsAndFlows:InterfaceBlock xmi:id="_RCHPMNaLEfColb2hkayOKw" base_Class="_RCGoINaLEfColb2hkayOKw"/>
+  <PortsAndFlows:FlowProperty xmi:id="_RCH2QNaLEfColb2hkayOKw" base_Property="_RCGoIdaLEfColb2hkayOKw" direction="in"/>
+  <PortsAndFlows:FlowProperty xmi:id="_cpm2wNaLEfColb2hkayOKw" base_Property="_cpkagNaLEfColb2hkayOKw" direction="out"/>
+  <PortsAndFlows:FlowProperty xmi:id="_qNU6cNaLEfColb2hkayOKw" base_Property="_qNTsUNaLEfColb2hkayOKw" direction="out"/>
 </xmi:XMI>
