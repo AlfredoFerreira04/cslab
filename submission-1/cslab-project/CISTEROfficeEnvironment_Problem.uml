@@ -16,6 +16,21 @@
           <packagedElement xmi:type="uml:Class" xmi:id="_lzqGoNU6EfCyXKz_9GZJUQ" name="Automatic Temperature Regulation"/>
           <packagedElement xmi:type="uml:Class" xmi:id="_lb_0kNU6EfCyXKz_9GZJUQ" name="Artificial Light Compensation"/>
           <packagedElement xmi:type="uml:Class" xmi:id="_k9moYNU6EfCyXKz_9GZJUQ" name="Automatic Natural Light Optimization"/>
+          <packagedElement xmi:type="uml:Abstraction" xmi:id="_IRt6gNbhEfChLIwJtDT7fw" name="Trace7" client="_m28IkNU6EfCyXKz_9GZJUQ" supplier="_6ybBQNaHEfColb2hkayOKw"/>
+          <packagedElement xmi:type="uml:Abstraction" xmi:id="_I7cM8NbhEfChLIwJtDT7fw" name="Trace8" client="_m28IkNU6EfCyXKz_9GZJUQ" supplier="_0VwwMNYhEfCfpP0K4_3HNA"/>
+          <packagedElement xmi:type="uml:Abstraction" xmi:id="_J2e44NbhEfChLIwJtDT7fw" name="Trace9" client="_mgrksNU6EfCyXKz_9GZJUQ" supplier="_6yboUNaHEfColb2hkayOKw"/>
+          <packagedElement xmi:type="uml:Abstraction" xmi:id="_KW2bANbhEfChLIwJtDT7fw" name="Trace10" client="_mJRxUNU6EfCyXKz_9GZJUQ" supplier="_6yboUNaHEfColb2hkayOKw"/>
+          <packagedElement xmi:type="uml:Abstraction" xmi:id="_LCc8wNbhEfChLIwJtDT7fw" name="Trace11" client="_mJRxUNU6EfCyXKz_9GZJUQ" supplier="_52BqcNaHEfColb2hkayOKw"/>
+          <packagedElement xmi:type="uml:Abstraction" xmi:id="_NxIwkNbhEfChLIwJtDT7fw" name="Trace12" client="_mJRxUNU6EfCyXKz_9GZJUQ" supplier="_bghhENaGEfColb2hkayOKw"/>
+          <packagedElement xmi:type="uml:Abstraction" xmi:id="_OXMrANbhEfChLIwJtDT7fw" name="Trace13" client="_mgrksNU6EfCyXKz_9GZJUQ" supplier="_bghhENaGEfColb2hkayOKw"/>
+          <packagedElement xmi:type="uml:Abstraction" xmi:id="_Pozc0NbhEfChLIwJtDT7fw" name="Trace14" client="_lzqGoNU6EfCyXKz_9GZJUQ" supplier="_4VinwNaKEfColb2hkayOKw"/>
+          <packagedElement xmi:type="uml:Abstraction" xmi:id="_P8RLYNbhEfChLIwJtDT7fw" name="Trace15" client="_lzqGoNU6EfCyXKz_9GZJUQ" supplier="_52BDYNaHEfColb2hkayOKw"/>
+          <packagedElement xmi:type="uml:Abstraction" xmi:id="_Q90vANbhEfChLIwJtDT7fw" name="Trace16" client="_lb_0kNU6EfCyXKz_9GZJUQ" supplier="_7gWW4NaKEfColb2hkayOKw"/>
+          <packagedElement xmi:type="uml:Abstraction" xmi:id="_Sj_bkNbhEfChLIwJtDT7fw" name="Trace17" client="_lb_0kNU6EfCyXKz_9GZJUQ" supplier="_LN3l0NYhEfCfpP0K4_3HNA"/>
+          <packagedElement xmi:type="uml:Abstraction" xmi:id="_TAOroNbhEfChLIwJtDT7fw" name="Trace18" client="_lb_0kNU6EfCyXKz_9GZJUQ" supplier="_cX3zsdYhEfCfpP0K4_3HNA"/>
+          <packagedElement xmi:type="uml:Abstraction" xmi:id="_UE2KUNbhEfChLIwJtDT7fw" name="Trace19" client="_k9moYNU6EfCyXKz_9GZJUQ" supplier="_7gWW4NaKEfColb2hkayOKw"/>
+          <packagedElement xmi:type="uml:Abstraction" xmi:id="_UoJrsNbhEfChLIwJtDT7fw" name="Trace20" client="_k9moYNU6EfCyXKz_9GZJUQ" supplier="_LN3l0NYhEfCfpP0K4_3HNA"/>
+          <packagedElement xmi:type="uml:Abstraction" xmi:id="_VMquANbhEfChLIwJtDT7fw" name="Trace21" client="_k9moYNU6EfCyXKz_9GZJUQ" supplier="_cX3zsdYhEfCfpP0K4_3HNA"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_SL6rANU6EfCyXKz_9GZJUQ" name="2 System Context">
           <packagedElement xmi:type="uml:Class" xmi:id="_sBDxINVHEfCyXKz_9GZJUQ" name="Smart Lighting and Heating System" useCase="_tCWO8NYLEfCOaftQeLUQ7A _0x8-8NYLEfCOaftQeLUQ7A _2mHEMNYLEfCOaftQeLUQ7A _4-oawNYLEfCOaftQeLUQ7A _-KFzANYLEfCOaftQeLUQ7A _CoppANYMEfCOaftQeLUQ7A _GlFpYNYMEfCOaftQeLUQ7A _JorWMNYMEfCOaftQeLUQ7A _O-VMQNYMEfCOaftQeLUQ7A">
@@ -471,4 +486,19 @@
   <Allocations:AllocateActivityPartition xmi:id="_SeguYNbQEfC9hqbLnCQfrA" base_ActivityPartition="_Seb14NbQEfC9hqbLnCQfrA"/>
   <Allocations:AllocateActivityPartition xmi:id="_XxNXENbQEfC9hqbLnCQfrA" base_ActivityPartition="_XxJssNbQEfC9hqbLnCQfrA"/>
   <Allocations:AllocateActivityPartition xmi:id="_ZrboENbQEfC9hqbLnCQfrA" base_ActivityPartition="_ZrX9sNbQEfC9hqbLnCQfrA"/>
+  <Requirements:Trace xmi:id="_IR_AQNbhEfChLIwJtDT7fw" base_DirectedRelationship="_IRt6gNbhEfChLIwJtDT7fw" base_Abstraction="_IRt6gNbhEfChLIwJtDT7fw"/>
+  <Requirements:Trace xmi:id="_I7epMNbhEfChLIwJtDT7fw" base_DirectedRelationship="_I7cM8NbhEfChLIwJtDT7fw" base_Abstraction="_I7cM8NbhEfChLIwJtDT7fw"/>
+  <Requirements:Trace xmi:id="_J2hVINbhEfChLIwJtDT7fw" base_DirectedRelationship="_J2e44NbhEfChLIwJtDT7fw" base_Abstraction="_J2e44NbhEfChLIwJtDT7fw"/>
+  <Requirements:Trace xmi:id="_KW4QMNbhEfChLIwJtDT7fw" base_DirectedRelationship="_KW2bANbhEfChLIwJtDT7fw" base_Abstraction="_KW2bANbhEfChLIwJtDT7fw"/>
+  <Requirements:Trace xmi:id="_LCeK4NbhEfChLIwJtDT7fw" base_DirectedRelationship="_LCc8wNbhEfChLIwJtDT7fw" base_Abstraction="_LCc8wNbhEfChLIwJtDT7fw"/>
+  <Requirements:Trace xmi:id="_NxKlwNbhEfChLIwJtDT7fw" base_DirectedRelationship="_NxIwkNbhEfChLIwJtDT7fw" base_Abstraction="_NxIwkNbhEfChLIwJtDT7fw"/>
+  <Requirements:Trace xmi:id="_OXN5INbhEfChLIwJtDT7fw" base_DirectedRelationship="_OXMrANbhEfChLIwJtDT7fw" base_Abstraction="_OXMrANbhEfChLIwJtDT7fw"/>
+  <Requirements:Trace xmi:id="_Po0q8NbhEfChLIwJtDT7fw" base_DirectedRelationship="_Pozc0NbhEfChLIwJtDT7fw" base_Abstraction="_Pozc0NbhEfChLIwJtDT7fw"/>
+  <Requirements:Trace xmi:id="_P8SZgNbhEfChLIwJtDT7fw" base_DirectedRelationship="_P8RLYNbhEfChLIwJtDT7fw" base_Abstraction="_P8RLYNbhEfChLIwJtDT7fw"/>
+  <Requirements:Trace xmi:id="_Q919INbhEfChLIwJtDT7fw" base_DirectedRelationship="_Q90vANbhEfChLIwJtDT7fw" base_Abstraction="_Q90vANbhEfChLIwJtDT7fw"/>
+  <Requirements:Trace xmi:id="_SkBQwNbhEfChLIwJtDT7fw" base_DirectedRelationship="_Sj_bkNbhEfChLIwJtDT7fw" base_Abstraction="_Sj_bkNbhEfChLIwJtDT7fw"/>
+  <Requirements:Trace xmi:id="_TAPSsNbhEfChLIwJtDT7fw" base_DirectedRelationship="_TAOroNbhEfChLIwJtDT7fw" base_Abstraction="_TAOroNbhEfChLIwJtDT7fw"/>
+  <Requirements:Trace xmi:id="_UE3_gNbhEfChLIwJtDT7fw" base_DirectedRelationship="_UE2KUNbhEfChLIwJtDT7fw" base_Abstraction="_UE2KUNbhEfChLIwJtDT7fw"/>
+  <Requirements:Trace xmi:id="_UoK50NbhEfChLIwJtDT7fw" base_DirectedRelationship="_UoJrsNbhEfChLIwJtDT7fw" base_Abstraction="_UoJrsNbhEfChLIwJtDT7fw"/>
+  <Requirements:Trace xmi:id="_VMr8INbhEfChLIwJtDT7fw" base_DirectedRelationship="_VMquANbhEfChLIwJtDT7fw" base_Abstraction="_VMquANbhEfChLIwJtDT7fw"/>
 </xmi:XMI>
