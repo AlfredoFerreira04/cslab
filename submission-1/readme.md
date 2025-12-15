@@ -1,18 +1,19 @@
 # CSLAB - First Submission
 
-- [Requirement Specification](#requirement-specification)
-  - [Black Box](#black-box)
-    - [Requirements](#requirements)
-    - [System Context](#system-context)
-    - [Use Cases](#use-cases)
-      - [Activity Diagrams](#activity-diagrams)
-  - [White Box](#white-box)
-    - [Conceptual Interfaces](#conceptual-interfaces)
-    - [Conceptual Subsystems](#conceptual-subsystems)
-  - [Traceability](#traceability)
-  - [Hazard Analysis](#hazard-analysis)
-- [Selected Technology](#selected-technology)
-- [Physical Sensor/Actuators](#physical-sensoractuators)
+- [CSLAB - First Submission](#cslab---first-submission)
+  - [Requirement Specification](#requirement-specification)
+    - [Black Box](#black-box)
+      - [Requirements](#requirements)
+      - [System Context](#system-context)
+      - [Use Cases](#use-cases)
+        - [Activity Diagrams](#activity-diagrams)
+    - [White Box](#white-box)
+      - [Conceptual Interfaces](#conceptual-interfaces)
+      - [Conceptual Subsystems](#conceptual-subsystems)
+    - [Traceability](#traceability)
+    - [Hazard Analysis](#hazard-analysis)
+  - [Selected Technology](#selected-technology)
+  - [Physical Sensor/Actuators](#physical-sensoractuators)
 
 ## Requirement Specification
 
@@ -67,7 +68,7 @@
 
 ### Traceability
 
-//TODO
+- Check [Report](G01_A_1220841_1220962.pdf)
 
 ### Hazard Analysis
 
@@ -82,8 +83,8 @@
 
 ## Selected Technology
 
-//TODO
+- Check [Report](G01_A_1220841_1220962.pdf)
 
 ## Physical Sensor/Actuators
 
-//TODO
+- Check [Report](G01_A_1220841_1220962.pdf)
