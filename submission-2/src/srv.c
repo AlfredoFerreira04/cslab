@@ -3,7 +3,7 @@
 // Run: ./alert_udp_server
 //
 // Requires: cJSON, Paho MQTT C client, and pthreads library.
-#include <asm.h>
+#include "asm.h"
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,20 +34,23 @@
 
 // Alert thresholds
 #define TEMP_DIFF_THRESHOLD 3.0 // degrees
-#define HUM_DIFF_THRESHOLD 20.0  // percent
+#define HUM_DIFF_THRESHOLD 20.0 // percent
 
 // NEW: Inactivity Timeout Configuration
 #define INACTIVITY_TIMEOUT_SEC 10 // Client is considered dead after 60 seconds of no reports
-#define MONITOR_INTERVAL_SEC 5   // Check every 10 seconds
+#define MONITOR_INTERVAL_SEC 5    // Check every 10 seconds
 
 // MQTT Configuration
 #define MQTT_ADDRESS "ssl://4979254f05ea480283d67c6f0d9f7525.s1.eu.hivemq.cloud:8883"
 #define MQTT_CLIENT_ID "udp_alert_server"
-#define MQTT_ALERT_TOPIC "/comcs/g04/alerts"
+#define MQTT_ALERT_TOPIC "/cslab/g01/alerts"
 
 // HiveMQ Credentials
 #define MQTT_USERNAME "web_client"
 #define MQTT_PASSWORD "Password1"
+
+#define MQTT_PREF_LIGHT_TOPIC "/cslab/g01/preferences/light"
+#define MQTT_PREF_TEMP_TOPIC "/cslab/g01/preferences/temperature"
 
 MQTTClient client;
 
@@ -57,13 +60,13 @@ typedef struct
     char id[128];
     double temperature;
     double humidity;
-    double light;            // Added: To match SensorData struct
-    char status[32];         // Added: To match "OPERATIONAL" payload
-    char dateObserved[64];   // Updated: Handles string or millis()
-    struct sockaddr_in addr; 
-    int has_seq;             
-    long last_seq;           
-    time_t last_seen;        
+    double light;          // Added: To match SensorData struct
+    char status[32];       // Added: To match "OPERATIONAL" payload
+    char dateObserved[64]; // Updated: Handles string or millis()
+    struct sockaddr_in addr;
+    int has_seq;
+    long last_seq;
+    time_t last_seen;
 } device_t;
 
 // Global storage for tracking connected devices (Req 2c)
@@ -72,14 +75,12 @@ static int device_count = 0;
 static FILE *alert_log = NULL;
 
 // Helper function definitions
-static void log_alert(const char *message); 
+static void log_alert(const char *message);
 
 static device_t *find_device_by_id(const char *id);
 static device_t *add_or_get_device(const char *id, struct sockaddr_in *addr);
 static void send_ack(int sockfd, struct sockaddr_in *client_addr, socklen_t addrlen, const char *id, long seq);
 
-
-// FIX: Restoring the definition of log_alert() which was missing.
 static void log_alert(const char *message)
 {
     // print timestamped message to stdout and file
@@ -97,7 +98,6 @@ static void log_alert(const char *message)
         fflush(alert_log);
     }
 }
-
 
 // Function running in a separate thread to keep the MQTT connection alive.
 void *mqtt_thread_func(void *arg)
@@ -137,7 +137,7 @@ static void log_alert_dual(const char *device,
     char timebuf[64];
     strftime(timebuf, sizeof(timebuf), "%Y-%m-%dT%H:%M:%S", &tm_now);
     cJSON_AddStringToObject(root, "timestamp", timebuf);
-    
+
     cJSON_AddStringToObject(root, "device", device);
     cJSON_AddStringToObject(root, "alertType", alert_type);
     cJSON_AddStringToObject(root, "message", message);
@@ -162,7 +162,7 @@ static void log_alert_dual(const char *device,
     if (rc == MQTTCLIENT_SUCCESS)
     {
         // Wait briefly for confirmation
-        MQTTClient_waitForCompletion(client, token, 1000); 
+        MQTTClient_waitForCompletion(client, token, 1000);
     }
     else
     {
@@ -171,7 +171,6 @@ static void log_alert_dual(const char *device,
 
     free(json_str);
 }
-
 
 // Function running in a separate thread to check for client inactivity (NEW REQUIREMENT)
 void *monitor_device_status(void *arg)
@@ -194,21 +193,20 @@ void *monitor_device_status(void *arg)
             if (inactivity_duration > INACTIVITY_TIMEOUT_SEC)
             {
                 // Trigger an alert for client inactivity
-                snprintf(message, sizeof(message), 
-                         "Client has not reported in %.0f seconds. Suspected failure.", 
+                snprintf(message, sizeof(message),
+                         "Client has not reported in %.0f seconds. Suspected failure.",
                          inactivity_duration);
-                
+
                 log_alert_dual(dev->id, "CLIENT_INACTIVITY", message);
-                
-                // Optional: To prevent immediate spamming of the same alert, 
-                // you might want to increase dev->last_seen temporarily or 
+
+                // Optional: To prevent immediate spamming of the same alert,
+                // you might want to increase dev->last_seen temporarily or
                 // use a separate flag. For simplicity, we just log the alert.
             }
         }
     }
     return NULL;
 }
-
 
 // Looks up a device based on its unique ID
 static device_t *find_device_by_id(const char *id)
@@ -299,6 +297,47 @@ static void send_ack(int sockfd, struct sockaddr_in *client_addr, socklen_t addr
     cJSON_Delete(ack); // Free cJSON object
 }
 
+int mqtt_message_arrived(void *context,
+                         char *topicName,
+                         int topicLen,
+                         MQTTClient_message *message)
+{
+    char logbuf[512];
+
+    /* Ensure payload is null-terminated */
+    char payload[256];
+    int len = (message->payloadlen < 255) ? message->payloadlen : 255;
+    memcpy(payload, message->payload, len);
+    payload[len] = '\0';
+
+    if (strcmp(topicName, "/cslab/g01/preferences/temperature") == 0)
+    {
+        snprintf(logbuf, sizeof(logbuf),
+                 "Temperature preference updated to %s",
+                 payload);
+    }
+    else if (strcmp(topicName, "/cslab/g01/preferences/light") == 0)
+    {
+        snprintf(logbuf, sizeof(logbuf),
+                 "Light preference updated to %s",
+                 payload);
+    }
+    else
+    {
+        /* Fallback for unexpected topics */
+        snprintf(logbuf, sizeof(logbuf),
+                 "unknown: \"Preference update on %s with value %s\"",
+                 topicName, payload);
+    }
+
+    log_alert(logbuf);
+
+    MQTTClient_freeMessage(&message);
+    MQTTClient_free(topicName);
+
+    return 1;
+}
+
 int main()
 {
     int sockfd;
@@ -346,9 +385,10 @@ int main()
 
     MQTTClient_connectOptions conn_opts = MQTTClient_connectOptions_initializer;
     MQTTClient_SSLOptions ssl_opts = MQTTClient_SSLOptions_initializer;
+    MQTTClient_setCallbacks(client, NULL, NULL, mqtt_message_arrived, NULL);
     // NOTE: For HiveMQ/public brokers, often trustStore is not needed if running on a modern OS with root certificates.
     // However, including the option is necessary for secure connection setup.
-    ssl_opts.enableServerCertAuth = 1; 
+    ssl_opts.enableServerCertAuth = 1;
     // ssl_opts.trustStore = "./cert.pem"; // Commented out, but required if cert file is used.
 
     conn_opts.keepAliveInterval = 20;
@@ -366,6 +406,13 @@ int main()
     else
     {
         printf("Connected to MQTT broker at %s\n", MQTT_ADDRESS);
+        MQTTClient_subscribe(client, MQTT_PREF_LIGHT_TOPIC, 1);
+        MQTTClient_subscribe(client, MQTT_PREF_TEMP_TOPIC, 1);
+
+        printf("Subscribed to preference topics:\n");
+        printf(" - %s\n", MQTT_PREF_LIGHT_TOPIC);
+        printf(" - %s\n", MQTT_PREF_TEMP_TOPIC);
+
         // Start the thread to keep the MQTT connection alive
         if (pthread_create(&mqtt_thread, NULL, mqtt_thread_func, NULL) != 0)
         {
@@ -376,7 +423,7 @@ int main()
             mqtt_thread_created = 1;
         }
     }
-    
+
     // --- Device Monitoring Initialization ---
     if (pthread_create(&monitor_thread, NULL, monitor_device_status, NULL) != 0)
     {
@@ -386,7 +433,6 @@ int main()
     {
         monitor_thread_created = 1;
     }
-
 
     // Main server loop
     while (1)
@@ -398,7 +444,8 @@ int main()
 
         if (n < 0)
         {
-            if (errno == EINTR) continue;
+            if (errno == EINTR)
+                continue;
             perror("Error receiving data");
             continue;
         }
@@ -422,11 +469,11 @@ int main()
 
         // --- 2. EXTRACT FIELDS (Updated for new Payload) ---
         cJSON *jid = cJSON_GetObjectItemCaseSensitive(root, "id");
-        cJSON *jtype = cJSON_GetObjectItemCaseSensitive(root, "type");       // NEW
-        cJSON *jstatus = cJSON_GetObjectItemCaseSensitive(root, "status");   // NEW
+        cJSON *jtype = cJSON_GetObjectItemCaseSensitive(root, "type");     // NEW
+        cJSON *jstatus = cJSON_GetObjectItemCaseSensitive(root, "status"); // NEW
         cJSON *jtemp = cJSON_GetObjectItemCaseSensitive(root, "temperature");
         cJSON *jhum = cJSON_GetObjectItemCaseSensitive(root, "relativeHumidity");
-        cJSON *jlight = cJSON_GetObjectItemCaseSensitive(root, "light");     // Optional
+        cJSON *jlight = cJSON_GetObjectItemCaseSensitive(root, "light"); // Optional
         cJSON *jdate = cJSON_GetObjectItemCaseSensitive(root, "dateObserved");
         cJSON *jseq = cJSON_GetObjectItemCaseSensitive(root, "seq");
         cJSON *jqos = cJSON_GetObjectItemCaseSensitive(root, "qos");
@@ -452,20 +499,24 @@ int main()
         double temp = jtemp->valuedouble;
         double hum = jhum->valuedouble;
         double light = cJSON_IsNumber(jlight) ? jlight->valuedouble : -1.0; // Default -1 if missing
-        
+
         // Handle Status
         char status_buf[32] = "UNKNOWN";
-        if (cJSON_IsString(jstatus)) {
+        if (cJSON_IsString(jstatus))
+        {
             strncpy(status_buf, jstatus->valuestring, sizeof(status_buf) - 1);
             status_buf[sizeof(status_buf) - 1] = '\0';
         }
 
         // Handle Date (CRITICAL FIX: Pico sends millis() as Number, not String)
         char date_buf[64] = "0";
-        if (cJSON_IsNumber(jdate)) {
+        if (cJSON_IsNumber(jdate))
+        {
             // Convert millis() number to string
             snprintf(date_buf, sizeof(date_buf), "%lu", (unsigned long)jdate->valuedouble);
-        } else if (cJSON_IsString(jdate)) {
+        }
+        else if (cJSON_IsString(jdate))
+        {
             strncpy(date_buf, jdate->valuestring, sizeof(date_buf) - 1);
             date_buf[sizeof(date_buf) - 1] = '\0';
         }
@@ -473,12 +524,15 @@ int main()
         long seq = -1;
         int qos = 0;
 
-        if (cJSON_IsNumber(jseq)) seq = (long)cJSON_GetNumberValue(jseq);
-        if (cJSON_IsNumber(jqos)) qos = jqos->valueint;
+        if (cJSON_IsNumber(jseq))
+            seq = (long)cJSON_GetNumberValue(jseq);
+        if (cJSON_IsNumber(jqos))
+            qos = jqos->valueint;
 
         // --- 4. DEVICE MANAGEMENT ---
         device_t *dev = add_or_get_device(id, &client_addr);
-        if (!dev) {
+        if (!dev)
+        {
             cJSON_Delete(root);
             continue;
         }
@@ -486,7 +540,11 @@ int main()
         // QoS Logic (Deduplication)
         if (qos == 1)
         {
-            if (seq == -1) { cJSON_Delete(root); continue; }
+            if (seq == -1)
+            {
+                cJSON_Delete(root);
+                continue;
+            }
             if (dev->has_seq && seq == dev->last_seq)
             {
                 send_ack(sockfd, &client_addr, len, id, seq);
@@ -498,7 +556,7 @@ int main()
         // Update Device State
         dev->temperature = temp;
         dev->humidity = hum;
-        dev->light = light; // Store light
+        dev->light = light;                                        // Store light
         strncpy(dev->status, status_buf, sizeof(dev->status) - 1); // Store status
         strncpy(dev->dateObserved, date_buf, sizeof(dev->dateObserved) - 1);
         dev->last_seen = time(NULL);
@@ -511,7 +569,7 @@ int main()
         }
 
         // Print Status Update
-        printf("[%s] %s (Status: %s) -> T:%.2f L:%.2f [Seq: %ld]\n", 
+        printf("[%s] %s (Status: %s) -> T:%.2f L:%.2f [Seq: %ld]\n",
                client_ip_str, id, status_buf, temp, light, seq);
 
         // --- 5. ALERTS (Logic remains same, just updated logging) ---
@@ -520,17 +578,17 @@ int main()
             snprintf(log_message, sizeof(log_message), "Temp %.2f out of range", temp);
             log_alert_dual(id, "TEMP_ALERT", log_message);
         }
-        
+
         // Check differential
         for (int i = 0; i < device_count; ++i)
         {
             device_t *other = &devices[i];
-            if (strcmp(other->id, dev->id) == 0) continue;
-            
+            if (strcmp(other->id, dev->id) == 0)
+                continue;
 
             // THIS COMMENTED BLOCK TO BE REPLACED BY ASM86
             int result = check_limit(dev->temperature, other->temperature, TEMP_DIFF_THRESHOLD);
-            
+
             if (result == 1)
             {
                 snprintf(log_message, sizeof(log_message), "Compared with %s, there is a differential that is too great (thresholds: %+0.2f°C / %+0.2f%%, respectively).",
