@@ -13,7 +13,7 @@
 
 // ---------------- CONFIG ----------------
 const char *ssid = "alfredo-Linux";
-const char *password = "Af4HZ2BG";
+const char *password = "nhQXMozZ";
 
 const IPAddress udp_server_ip(10, 42, 0, 1);
 const int udp_port = 5005;

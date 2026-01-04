@@ -1,6 +1,8 @@
 /*
-  Raspberry Pi Pico W - SMART ACTUATOR (CORRECTED)
+  Raspberry Pi Pico W - SMART ACTUATOR (QUEUED ARCHITECTURE)
   Controls: Stepper Motor (Blinds), LED 15 (Lamp), LED 14 (Heater)
+  Logic: uses isBlindsClosed (1=Closed, 0=Open).
+  Feature: Circular Queue (Size 5) + Mutex for safe processing.
 */
 
 #include <WiFi.h>
@@ -11,14 +13,14 @@
 
 // ---------------- CONFIG ----------------
 const char *ssid = "alfredo-Linux";
-const char *password = "Af4HZ2BG";
+const char *password = "nhQXMozZ";
 
 const char *mqtt_server = "4979254f05ea480283d67c6f0d9f7525.s1.eu.hivemq.cloud";
 const char *mqtt_username = "web_client";
 const char *mqtt_password = "Password1";
 const int mqtt_port = 8883;
 
-const char *actuation_topic = "/cslab/g01/actuation";
+const char *actuation_topic = "/cslab/g01/commands";
 
 // Hardware Pins
 const int IN1 = 28;
@@ -29,9 +31,8 @@ const int LED_HEATER = 14;
 const int LED_LAMP = 15;
 
 // Motor Config
-const int MAX_POS = 9216; // Full extension
-// --- FIX WAS HERE: Changed 'int' to 'const char *' ---
-const char *POS_FILE_PATH = "/motor_pos.txt"; 
+const int MAX_POS = 9216; // Steps for full open/close
+const char *STATE_FILE_PATH = "/motor_state_v2.txt"; 
 
 const int stepCount = 8;
 const int halfStepSequence[stepCount][4] = {
@@ -39,44 +40,86 @@ const int halfStepSequence[stepCount][4] = {
   {0, 0, 1, 0}, {0, 0, 1, 1}, {0, 0, 0, 1}, {1, 0, 0, 1}
 };
 
-// State
-int currentStepPhase = 0;
-long absolutePosition = 0; // 0 = Closed, MAX_POS = Open
+// State Variables
+int isBlindsClosed = 1; 
+int currentStepPhase = 0; 
+
+// ---------------- QUEUE & MUTEX DEFINITIONS ----------------
+const int QUEUE_SIZE = 5;
+bool lightActionQueue[QUEUE_SIZE]; // Stores 'turnOn' (true/false)
+int queueHead = 0; // Where we read from (Oldest)
+int queueTail = 0; // Where we write to (Newest)
+int queueCount = 0;
+
+// The Mutex (Locked = true, Unlocked = false)
+bool motorMutex = false; 
+
 WiFiClientSecure picoClient;
 PubSubClient client(picoClient);
 
-// ---------------- HELPERS ----------------
+// ---------------- QUEUE HELPERS ----------------
 
-void savePosition() {
-  File f = LittleFS.open(POS_FILE_PATH, "w");
+void enqueueLightCommand(bool turnOn) {
+  // If full, we drop the oldest to make room for the new one (Overwrite strategy)
+  if (queueCount == QUEUE_SIZE) {
+      Serial.println("QUEUE: Full. Overwriting oldest command.");
+      queueHead = (queueHead + 1) % QUEUE_SIZE; // Advance head (drop oldest)
+      queueCount--;
+  }
+  
+  lightActionQueue[queueTail] = turnOn;
+  queueTail = (queueTail + 1) % QUEUE_SIZE;
+  queueCount++;
+  
+  Serial.print("QUEUE: Added command. Count: "); Serial.println(queueCount);
+}
+
+// Returns true if an item was retrieved, false if empty
+bool dequeueLightCommand(bool &actionContainer) {
+  if (queueCount == 0) return false;
+  
+  actionContainer = lightActionQueue[queueHead];
+  queueHead = (queueHead + 1) % QUEUE_SIZE;
+  queueCount--;
+  return true;
+}
+
+// ---------------- PERSISTENCE ----------------
+
+void saveState() {
+  File f = LittleFS.open(STATE_FILE_PATH, "w");
   if (f) {
-    f.printf("%ld %d", absolutePosition, currentStepPhase);
+    f.printf("%d %d", isBlindsClosed, currentStepPhase);
     f.close();
+    Serial.println("FS: State Saved.");
   }
 }
 
-void loadPosition() {
-  if (LittleFS.exists(POS_FILE_PATH)) {
-    File f = LittleFS.open(POS_FILE_PATH, "r");
+void loadState() {
+  if (LittleFS.exists(STATE_FILE_PATH)) {
+    File f = LittleFS.open(STATE_FILE_PATH, "r");
     if (f) {
-      absolutePosition = f.parseInt();
+      isBlindsClosed = f.parseInt();
       currentStepPhase = f.parseInt();
       f.close();
+      Serial.print("FS: Loaded State. isBlindsClosed = ");
+      Serial.println(isBlindsClosed);
     }
+  } else {
+    Serial.println("FS: No save file. Defaulting to CLOSED (1).");
+    isBlindsClosed = 1;
   }
 }
 
+// ---------------- MOTOR LOGIC ----------------
+
 void stepMotor(int steps) {
+  Serial.print("MOTOR: Moving steps: "); Serial.println(steps);
   int direction = (steps >= 0) ? 1 : -1;
   int stepsLeft = abs(steps);
 
   while (stepsLeft > 0) {
-    // BOUNDS CHECK
-    if (direction == 1 && absolutePosition >= MAX_POS) break;
-    if (direction == -1 && absolutePosition <= 0) break;
-
     currentStepPhase = (currentStepPhase + direction + stepCount) % stepCount;
-    absolutePosition += direction;
 
     digitalWrite(IN1, halfStepSequence[currentStepPhase][0]);
     digitalWrite(IN2, halfStepSequence[currentStepPhase][1]);
@@ -85,60 +128,73 @@ void stepMotor(int steps) {
 
     delay(3); // Speed
     
-    // CRITICAL: Keep MQTT alive during long motor moves
+    // Check for incoming messages (Will go to Queue, won't interrupt this movement)
     if (stepsLeft % 100 == 0) client.loop(); 
-    
     stepsLeft--;
   }
   
-  // Cut power to coils
   digitalWrite(IN1, LOW); digitalWrite(IN2, LOW);
   digitalWrite(IN3, LOW); digitalWrite(IN4, LOW);
-  
-  savePosition();
+  Serial.println("MOTOR: Movement Complete.");
 }
 
-// ---------------- ACTUATION LOGIC ----------------
+// ---------------- ACTUATION LOGIC (CONSUMER) ----------------
 
 void handleLightCommand(bool turnOn) {
+  // 1. LOCK MUTEX
+  Serial.println("MUTEX: Locked.");
+  motorMutex = true; 
+
+  // --- CRITICAL SECTION START ---
   if (turnOn) {
-    Serial.println("CMD: Increase Light");
-    // Priority 1: Open Blinds
-    if (absolutePosition < MAX_POS) {
+    // CMD: INCREASE LIGHT (ON)
+    Serial.println("CMD: Increase Light (ON)");
+    if (isBlindsClosed == 1) {
       Serial.println("Action: Opening Blinds...");
-      stepMotor(MAX_POS - absolutePosition); // Move to Max
-    } 
-    // Priority 2: If Blinds Open, Turn on Lamp
-    else {
-      Serial.println("Action: Blinds Open. Turning on Lamp.");
+      stepMotor(MAX_POS); 
+      isBlindsClosed = 0; 
+      saveState();
+    } else {
+      Serial.println("Action: Blinds already OPEN. Lamp ON.");
       digitalWrite(LED_LAMP, HIGH);
     }
-  } else {
-    Serial.println("CMD: Decrease Light");
-    // Priority 1: Turn off Lamp
+  } 
+  else {
+    // CMD: DECREASE LIGHT (OFF)
+    Serial.println("CMD: Decrease Light (OFF)");
     digitalWrite(LED_LAMP, LOW);
     
-    // Priority 2: Close Blinds
-    if (absolutePosition > 0) {
+    if (isBlindsClosed == 0) {
       Serial.println("Action: Closing Blinds...");
-      stepMotor(-absolutePosition); // Move to 0
+      stepMotor(-MAX_POS); 
+      isBlindsClosed = 1; 
+      saveState(); 
+    } else {
+      Serial.println("Action: Blinds already CLOSED.");
     }
   }
+  // --- CRITICAL SECTION END ---
+
+  // 2. UNLOCK MUTEX
+  motorMutex = false;
+  Serial.println("MUTEX: Unlocked.");
 }
 
 void handleHeatCommand(bool turnOn) {
+  // Heater is instant (no motor), so it doesn't strictly need the queue/mutex 
+  // unless you want to prevent it changing while motor moves. 
+  // For now, we allow heater to change instantly.
+  Serial.print("CMD: Heater "); Serial.println(turnOn ? "ON" : "OFF");
   digitalWrite(LED_HEATER, turnOn ? HIGH : LOW);
-  Serial.print("CMD: Heater ");
-  Serial.println(turnOn ? "ON" : "OFF");
 }
 
-// ---------------- MQTT CALLBACK ----------------
+// ---------------- MQTT CALLBACK (PRODUCER) ----------------
 
 void callback(char *topic, byte *payload, unsigned int length) {
   char msg[length + 1];
   memcpy(msg, payload, length);
   msg[length] = '\0';
-  Serial.print("Msg: "); Serial.println(msg);
+  Serial.print("MQTT Received: "); Serial.println(msg);
 
   StaticJsonDocument<256> doc;
   DeserializationError error = deserializeJson(doc, msg);
@@ -146,14 +202,15 @@ void callback(char *topic, byte *payload, unsigned int length) {
 
   const char* type = doc["type"];   
   const char* action = doc["action"]; 
-  
-  if (!type || !action) return; // Safety check
+  if (!type || !action) return;
 
   bool turnOn = (strcmp(action, "ON") == 0);
 
   if (strcmp(type, "LIGHT") == 0) {
-    handleLightCommand(turnOn);
-  } else if (strcmp(type, "HEAT") == 0) {
+    // DO NOT execute logic here. Just Add to Queue.
+    enqueueLightCommand(turnOn);
+  } 
+  else if (strcmp(type, "HEAT") == 0) {
     handleHeatCommand(turnOn);
   }
 }
@@ -163,35 +220,44 @@ void callback(char *topic, byte *payload, unsigned int length) {
 void setup() {
   Serial.begin(115200);
   
-  // Pins
   pinMode(IN1, OUTPUT); pinMode(IN2, OUTPUT);
   pinMode(IN3, OUTPUT); pinMode(IN4, OUTPUT);
   pinMode(LED_HEATER, OUTPUT); pinMode(LED_LAMP, OUTPUT);
+  digitalWrite(LED_HEATER, LOW); digitalWrite(LED_LAMP, LOW);
 
-  // FS & Position
   if (!LittleFS.begin()) { LittleFS.format(); LittleFS.begin(); }
-  loadPosition();
+  loadState();
 
-  // WiFi
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) delay(500);
   Serial.println("Actuator Online.");
 
-  // MQTT
   picoClient.setInsecure();
   client.setServer(mqtt_server, mqtt_port);
   client.setCallback(callback);
 }
 
 void loop() {
+  // 1. Maintain Network
   if (!client.connected()) {
     String clientId = "PICO_Actuator-" + String(random(0xffff), HEX);
     if (client.connect(clientId.c_str(), mqtt_username, mqtt_password)) {
       client.subscribe(actuation_topic);
       Serial.println("Subscribed.");
-    } else {
-      delay(5000);
-    }
+    } else { delay(5000); }
   }
-  client.loop();
+  client.loop(); // This checks for new packets -> triggers callback -> fills queue
+
+  // 2. Process Queue (Consumer)
+  // Logic: Notice queue has items -> Try locking -> If free, Execute oldest
+  if (queueCount > 0) {
+    if (!motorMutex) {
+      // Mutex is FREE. We can proceed.
+      bool actionToPerform;
+      if (dequeueLightCommand(actionToPerform)) {
+         handleLightCommand(actionToPerform);
+      }
+    } 
+    // If motorMutex is TRUE, we just loop again (non-blocking wait)
+  }
 }
