@@ -16,10 +16,10 @@
 #include <WiFiClientSecure.h>
 
 // ---------------- CONFIG ----------------
-const char *ssid = "alfredo-Linux";
-const char *password = "nhQXMozZ";
+const char *ssid = "Pixel_Alf";
+const char *password = "alfredopassword04";
 
-const IPAddress udp_server_ip(10, 42, 0, 1);
+const IPAddress udp_server_ip(10, 199, 121, 191);
 const int udp_port = 5005;
 
 const char *mqtt_server = "4979254f05ea480283d67c6f0d9f7525.s1.eu.hivemq.cloud";
@@ -238,7 +238,7 @@ void NetworkTask(void *pvParameters) {
             bool delivered = sendWithQoS(payload, seq);
             
             if (client.connected()) {
-                client.publish("/comcs/g04/sensor", payload.c_str(), true);
+                client.publish("/cslab/g01/sensor", payload.c_str(), true);
             }
 
             if (!delivered) {

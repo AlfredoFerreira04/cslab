@@ -32,14 +32,15 @@
 // PREFERENCES & HYSTERESIS
 #define DEFAULT_PREF_TEMP_MIN 20.0
 #define DEFAULT_PREF_TEMP_MAX 26.0
-#define DEFAULT_PREF_LIGHT_MIN 500.0
+#define DEFAULT_PREF_LIGHT_MIN 5.0
+#define OVERLOARD_LIGHT_THRESHOLD 4.0
 
 // Alert Thresholds
 #define TEMP_DIFF_THRESHOLD 3.0
 
 // --- TIMING CONFIGURATION ---
 #define COMMAND_COOLDOWN 0.5        // Global Hardware cooldown (0.5s)
-#define ACTUATOR_SEQUENCE_TIME 20.0 // LOCKOUT: Retry interval (20s)
+#define ACTUATOR_SEQUENCE_TIME 45.0 // LOCKOUT: Retry interval (45s)
 
 #define INACTIVITY_TIMEOUT_SEC 15
 #define MONITOR_INTERVAL_SEC 5
@@ -242,7 +243,14 @@ void assess_environment()
     // 2. LIGHT LOGIC
     if (now >= light_lockout_until && avg_light < pref_light_min)
     {
-        send_actuator_command("LIGHT", "ON");
+        if (pref_light_min + OVERLOARD_LIGHT_THRESHOLD < avg_light)
+        {
+            send_actuator_command("LIGHT", "OFF");
+        }
+        else
+        {
+            send_actuator_command("LIGHT", "ON");
+        }
     }
 }
 
@@ -381,13 +389,10 @@ int mqtt_message_arrived(void *context, char *topicName, int topicLen, MQTTClien
 
     if (strcmp(topicName, MQTT_PREF_TEMP_TOPIC) == 0)
     {
-        double min, max;
-        if (sscanf(payload, "%lf,%lf", &min, &max) == 2)
-        {
-            pref_temp_min = min;
-            pref_temp_max = max;
-            printf("PREFS: Updated Temp Range: %.1f - %.1f\n", pref_temp_min, pref_temp_max);
-        }
+        double value = atoi(payload);
+        pref_temp_min = value - TEMP_DIFF_THRESHOLD;
+        pref_temp_max = value + TEMP_DIFF_THRESHOLD;
+        printf("PREFS: Updated Temp Range: %.1f - %.1f\n", pref_temp_min, pref_temp_max);
     }
     else if (strcmp(topicName, MQTT_PREF_LIGHT_TOPIC) == 0)
     {
@@ -501,7 +506,7 @@ int main()
                     dev->last_seq = seq;
                     send_ack(sockfd, &client_addr, len, id, seq);
                 }
-                printf("[%s] %s -> T:%.2f L:%.2f\n", client_ip_str, id, temp, light);
+                printf("[%s] -> T:%.2f L:%.2f\n", id, temp, light);
 
                 if (temp < TEMP_MIN_VALID || temp > TEMP_MAX_VALID)
                 {

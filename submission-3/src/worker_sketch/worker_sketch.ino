@@ -1,267 +1,263 @@
-// Raspberry Pi Pico W - FreeRTOS Worker
-// Environment: Arduino Mbed OS or Earle Philhower Core (supports FreeRTOS standard)
-#define __FREERTOS 1
+/*
+  Raspberry Pi Pico W - SMART ACTUATOR (QUEUED ARCHITECTURE)
+  Controls: Stepper Motor (Blinds), LED 15 (Lamp), LED 14 (Heater)
+  Logic: uses isBlindsClosed (1=Closed, 0=Open).
+  Feature: Circular Queue (Size 5) + Mutex for safe processing.
+*/
+
 #include <WiFi.h>
-#include <WiFiUdp.h>
-#include <DHT.h>
-#include <ArduinoJson.h>
-#include <LittleFS.h>
 #include <PubSubClient.h>
 #include <WiFiClientSecure.h>
-
-// FreeRTOS headers are usually auto-included in Pico Arduino cores, 
-// but strictly speaking:
-#include <FreeRTOS.h>
-#include <task.h>
-#include <queue.h>
-#include <semphr.h>
+#include <ArduinoJson.h>
+#include <LittleFS.h>
 
 // ---------------- CONFIG ----------------
-const char *ssid = "alfredo-Linux";
-const char *password = "nhQXMozZ";
-
-const IPAddress udp_server_ip(10, 42, 0, 1);
-const int udp_port = 5005;
+const char *ssid = "Pixel_Alf";
+const char *password = "alfredopassword04";
 
 const char *mqtt_server = "4979254f05ea480283d67c6f0d9f7525.s1.eu.hivemq.cloud";
 const char *mqtt_username = "web_client";
 const char *mqtt_password = "Password1";
 const int mqtt_port = 8883;
 
-const char *mqtt_command_topic = "/cslab/g01/commands"; 
-const char *mqtt_actuator_topic = "/cslab/g01/actuation"; 
+const char *actuation_topic = "/cslab/g01/commands";
 
-#define DHTPIN 4
-#define DHTTYPE DHT11
-#define LDR_PIN 26 
-#define DEVICE_ID "PICO_Device_01" 
+// Hardware Pins
+const int IN1 = 28;
+const int IN2 = 27;
+const int IN3 = 26;
+const int IN4 = 22;
+const int LED_HEATER = 14;
+const int LED_LAMP = 15;
 
-// ---------------- GLOBALS & HANDLES ----------------
+// Motor Config
+const int MAX_POS = 10230; // Steps for full open/close
+const char *STATE_FILE_PATH = "/motor_state_v2.txt"; 
 
-DHT dht(DHTPIN, DHTTYPE);
-WiFiUDP udp;
+const int stepCount = 8;
+const int halfStepSequence[stepCount][4] = {
+  {1, 0, 0, 0}, {1, 1, 0, 0}, {0, 1, 0, 0}, {0, 1, 1, 0},
+  {0, 0, 1, 0}, {0, 0, 1, 1}, {0, 0, 0, 1}, {1, 0, 0, 1}
+};
+
+// State Variables
+int isBlindsClosed = 1; 
+int currentStepPhase = 0; 
+
+// ---------------- QUEUE & MUTEX DEFINITIONS ----------------
+const int QUEUE_SIZE = 5;
+bool lightActionQueue[QUEUE_SIZE]; // Stores 'turnOn' (true/false)
+int queueHead = 0; // Where we read from (Oldest)
+int queueTail = 0; // Where we write to (Newest)
+int queueCount = 0;
+
+// The Mutex (Locked = true, Unlocked = false)
+bool motorMutex = false; 
+
 WiFiClientSecure picoClient;
 PubSubClient client(picoClient);
 
-// RTOS Handles
-QueueHandle_t sensorQueue;
-SemaphoreHandle_t wifiMutex; // Optional: To protect WiFi if multiple tasks use it
+// ---------------- QUEUE HELPERS ----------------
 
-struct SensorData {
-    float tempReading;
-    int lightReading;
-    unsigned long timestamp;
-};
-
-unsigned long seq = 0;
-bool fs_is_ready = false;
-
-// ---------------- HELPERS (Network Logic) ----------------
-
-// Helper: Setup FS
-void setupLittleFS() {
-    if (!LittleFS.begin()) { LittleFS.format(); LittleFS.begin(); }
-    fs_is_ready = true;
+void enqueueLightCommand(bool turnOn) {
+  // If full, we drop the oldest to make room for the new one (Overwrite strategy)
+  if (queueCount == QUEUE_SIZE) {
+      Serial.println("QUEUE: Full. Overwriting oldest command.");
+      queueHead = (queueHead + 1) % QUEUE_SIZE; // Advance head (drop oldest)
+      queueCount--;
+  }
+  
+  lightActionQueue[queueTail] = turnOn;
+  queueTail = (queueTail + 1) % QUEUE_SIZE;
+  queueCount++;
+  
+  Serial.print("QUEUE: Added command. Count: "); Serial.println(queueCount);
 }
 
-// Helper: Read LDR
-int readLDR() {   
-    int rawValue = analogRead(LDR_PIN);
-    return 4095 - rawValue; 
+// Returns true if an item was retrieved, false if empty
+bool dequeueLightCommand(bool &actionContainer) {
+  if (queueCount == 0) return false;
+  
+  actionContainer = lightActionQueue[queueHead];
+  queueHead = (queueHead + 1) % QUEUE_SIZE;
+  queueCount--;
+  return true;
 }
 
-// Helper: MQTT Callback
-void relayToActuator(const char* type, const char* action) {
-    if (!client.connected()) return;
-    StaticJsonDocument<200> doc;
-    doc["type"] = type;     
-    doc["action"] = action; 
-    char buffer[256];
-    serializeJson(doc, buffer);
-    client.publish(mqtt_actuator_topic, buffer);
+// ---------------- PERSISTENCE ----------------
+
+void saveState() {
+  File f = LittleFS.open(STATE_FILE_PATH, "w");
+  if (f) {
+    f.printf("%d %d", isBlindsClosed, currentStepPhase);
+    f.close();
+    Serial.println("FS: State Saved.");
+  }
 }
+
+void loadState() {
+  if (LittleFS.exists(STATE_FILE_PATH)) {
+    File f = LittleFS.open(STATE_FILE_PATH, "r");
+    if (f) {
+      isBlindsClosed = f.parseInt();
+      currentStepPhase = f.parseInt();
+      f.close();
+      Serial.print("FS: Loaded State. isBlindsClosed = ");
+      Serial.println(isBlindsClosed);
+    }
+  } else {
+    Serial.println("FS: No save file. Defaulting to CLOSED (1).");
+    isBlindsClosed = 1;
+  }
+}
+
+// ---------------- MOTOR LOGIC ----------------
+
+void stepMotor(int steps) {
+  Serial.print("MOTOR: Moving steps: "); Serial.println(steps);
+  int direction = (steps >= 0) ? 1 : -1;
+  int stepsLeft = abs(steps);
+
+  while (stepsLeft > 0) {
+    currentStepPhase = (currentStepPhase + direction + stepCount) % stepCount;
+
+    digitalWrite(IN1, halfStepSequence[currentStepPhase][0]);
+    digitalWrite(IN2, halfStepSequence[currentStepPhase][1]);
+    digitalWrite(IN3, halfStepSequence[currentStepPhase][2]);
+    digitalWrite(IN4, halfStepSequence[currentStepPhase][3]);
+
+    delay(3); // Speed
+    
+    // Check for incoming messages (Will go to Queue, won't interrupt this movement)
+    if (stepsLeft % 100 == 0) client.loop(); 
+    stepsLeft--;
+  }
+  
+  digitalWrite(IN1, LOW); digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW); digitalWrite(IN4, LOW);
+  Serial.println("MOTOR: Movement Complete.");
+}
+
+// ---------------- ACTUATION LOGIC (CONSUMER) ----------------
+
+void handleLightCommand(bool turnOn) {
+  // 1. LOCK MUTEX
+  Serial.println("MUTEX: Locked.");
+  motorMutex = true; 
+
+  // --- CRITICAL SECTION START ---
+  if (turnOn) {
+    // CMD: INCREASE LIGHT (ON)
+    Serial.println("CMD: Increase Light (ON)");
+    if (isBlindsClosed == 1) {
+      Serial.println("Action: Opening Blinds...");
+      stepMotor(MAX_POS); 
+      isBlindsClosed = 0; 
+      saveState();
+    } else {
+      Serial.println("Action: Blinds already OPEN. Lamp ON.");
+      digitalWrite(LED_LAMP, HIGH);
+    }
+  } 
+  else {
+    // CMD: DECREASE LIGHT (OFF)
+    Serial.println("CMD: Decrease Light (OFF)");
+    digitalWrite(LED_LAMP, LOW);
+    
+    if (isBlindsClosed == 0) {
+      Serial.println("Action: Closing Blinds...");
+      stepMotor(-MAX_POS); 
+      isBlindsClosed = 1; 
+      saveState(); 
+    } else {
+      Serial.println("Action: Blinds already CLOSED.");
+    }
+  }
+  // --- CRITICAL SECTION END ---
+
+  // 2. UNLOCK MUTEX
+  motorMutex = false;
+  Serial.println("MUTEX: Unlocked.");
+}
+
+void handleHeatCommand(bool turnOn) {
+  // Heater is instant (no motor), so it doesn't strictly need the queue/mutex 
+  // unless you want to prevent it changing while motor moves. 
+  // For now, we allow heater to change instantly.
+  Serial.print("CMD: Heater "); Serial.println(turnOn ? "ON" : "OFF");
+  digitalWrite(LED_HEATER, turnOn ? HIGH : LOW);
+}
+
+// ---------------- MQTT CALLBACK (PRODUCER) ----------------
 
 void callback(char *topic, byte *payload, unsigned int length) {
-    char msg[length + 1];
-    memcpy(msg, payload, length);
-    msg[length] = '\0';
-    
-    StaticJsonDocument<256> doc;
-    if (deserializeJson(doc, msg)) return;
+  char msg[length + 1];
+  memcpy(msg, payload, length);
+  msg[length] = '\0';
+  Serial.print("MQTT Received: "); Serial.println(msg);
 
-    if (doc["target_id"] && strcmp(doc["target_id"], DEVICE_ID) == 0) {
-        relayToActuator(doc["type"], doc["action"]);
-    }
+  StaticJsonDocument<256> doc;
+  DeserializationError error = deserializeJson(doc, msg);
+  if (error) return;
+
+  const char* type = doc["type"];   
+  const char* action = doc["action"]; 
+  if (!type || !action) return;
+
+  bool turnOn = (strcmp(action, "ON") == 0);
+
+  if (strcmp(type, "LIGHT") == 0) {
+    // DO NOT execute logic here. Just Add to Queue.
+    enqueueLightCommand(turnOn);
+  } 
+  else if (strcmp(type, "HEAT") == 0) {
+    handleHeatCommand(turnOn);
+  }
 }
 
-void reconnectMqtt() {
-    // Non-blocking attempt approach usually preferred in RTOS, 
-    // but for simplicity we keep a short blocking retry loop here.
-    if (!client.connected()) {
-        String clientId = "PICO_Worker-" + String(random(0xffff), HEX);
-        if (client.connect(clientId.c_str(), mqtt_username, mqtt_password)) {
-            client.subscribe(mqtt_command_topic);
-        }
-    }
-}
-
-// Helper: UDP ACK Wait
-bool waitForAck(unsigned long mySeq) {
-    unsigned long start = millis();
-    char incoming[512];
-    while (millis() - start < 500) { 
-        int packetSize = udp.parsePacket();
-        if (packetSize) {
-            int len = udp.read(incoming, sizeof(incoming)-1);
-            incoming[len] = 0;
-            StaticJsonDocument<128> doc;
-            if (!deserializeJson(doc, incoming)) {
-                if (doc["id"] == DEVICE_ID && doc["seq"] == mySeq && doc["type"] == "ACK") return true;
-            }
-        }
-        // Very important: Yield to other tasks while waiting!
-        vTaskDelay(10 / portTICK_PERIOD_MS); 
-    }
-    return false;
-}
-
-bool sendWithQoS(const String &payload, unsigned long current_seq) {
-    if (WiFi.status() != WL_CONNECTED) return false;
-    for(int retry=0; retry<3; retry++) {
-        udp.beginPacket(udp_server_ip, udp_port);
-        udp.print(payload);
-        udp.endPacket();
-        if (waitForAck(current_seq)) return true;
-        vTaskDelay(100 * (retry + 1) / portTICK_PERIOD_MS); 
-    }
-    return false;
-}
-
-void logDataToFile(const String &payload) {
-    if (!fs_is_ready) return;
-    File f = LittleFS.open("/telemetry_log.txt", "a");
-    if (f) { f.println(payload); f.close(); }
-}
-
-void transmitStoredData() {
-    if (!fs_is_ready) return;
-    if (!LittleFS.exists("/telemetry_log.txt")) return;
-
-    File f = LittleFS.open("/telemetry_log.txt", "r");
-    if (!f) return;
-    
-    // In a real RTOS app, you might read line by line and send, 
-    // rather than dumping everything at once which might block too long.
-    // For now, we assume simple file existence check.
-    f.close();
-    LittleFS.remove("/telemetry_log.txt"); 
-}
-
-// ---------------- TASKS ----------------
-
-// Task 1: Sensor Reading (Producer)
-// Runs on Core 0 or 1, handles hardware timing strictly.
-void TaskSensors(void *pvParameters) {
-    (void) pvParameters;
-
-    for (;;) {
-        SensorData data;
-        
-        // 1. Read Hardware
-        data.tempReading = dht.readTemperature();
-        data.lightReading = readLDR();
-        data.timestamp = millis();
-
-        if (isnan(data.tempReading)) data.tempReading = 0.0;
-
-        // 2. Send to Queue
-        // wait up to 10ms if queue is full
-        xQueueSend(sensorQueue, &data, 10 / portTICK_PERIOD_MS);
-
-        // 3. Block for 1 second (1000ms)
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-    }
-}
-
-// Task 2: Network & Comm (Consumer)
-// Handles WiFi, MQTT loop, and draining the queue to UDP.
-void TaskNetwork(void *pvParameters) {
-    (void) pvParameters;
-
-    // Connect WiFi inside the task (or in setup)
-    WiFi.begin(ssid, password);
-    while (WiFi.status() != WL_CONNECTED) {
-        vTaskDelay(500 / portTICK_PERIOD_MS);
-    }
-    
-    udp.begin(udp_port);
-    picoClient.setInsecure();
-    client.setServer(mqtt_server, mqtt_port);
-    client.setCallback(callback);
-
-    SensorData data;
-    
-    for (;;) {
-        // Maintain MQTT connection
-        if (!client.connected()) reconnectMqtt();
-        client.loop();
-
-        // Check Queue for new sensor data
-        // portMAX_DELAY means "sleep until something arrives"
-        // But we use a short timeout so we can keep running client.loop()
-        if (xQueueReceive(sensorQueue, &data, 100 / portTICK_PERIOD_MS) == pdPASS) {
-            
-            // Construct Payload
-            StaticJsonDocument<256> doc;
-            doc["id"] = DEVICE_ID;
-            doc["type"] = "WeatherObserved";
-            doc["temperature"] = data.tempReading;
-            doc["light"] = data.lightReading;
-            doc["dateObserved"] = data.timestamp;
-            doc["qos"] = 1;
-            doc["seq"] = seq;
-
-            String payload;
-            serializeJson(doc, payload);
-
-            // Send
-            bool delivered = sendWithQoS(payload, seq);
-            if (client.connected()) client.publish("/comcs/g04/sensor", payload.c_str(), true);
-
-            // Handle Persistence
-            if (!delivered) logDataToFile(payload);
-            else transmitStoredData();
-
-            seq++;
-        }
-        
-        // Small yield not strictly necessary if QueueReceive blocks, 
-        // but good for safety in some RTOS configs.
-        vTaskDelay(10 / portTICK_PERIOD_MS);
-    }
-}
-
-// ---------------- MAIN ----------------
+// ---------------- SETUP & LOOP ----------------
 
 void setup() {
-    Serial.begin(115200);
-    analogReadResolution(12);
-    setupLittleFS();
-    dht.begin();
+  Serial.begin(115200);
+  
+  pinMode(IN1, OUTPUT); pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT); pinMode(IN4, OUTPUT);
+  pinMode(LED_HEATER, OUTPUT); pinMode(LED_LAMP, OUTPUT);
+  digitalWrite(LED_HEATER, LOW); digitalWrite(LED_LAMP, LOW);
 
-    // Create a queue capable of holding 20 sensor readings
-    sensorQueue = xQueueCreate(20, sizeof(SensorData));
+  if (!LittleFS.begin()) { LittleFS.format(); LittleFS.begin(); }
+  loadState();
 
-    // Create Tasks
-    // Stack sizes (2048/4096) may need adjustment based on library usage
-    xTaskCreate(TaskSensors, "Sensors", 2048, NULL, 1, NULL);
-    xTaskCreate(TaskNetwork, "Network", 8192, NULL, 1, NULL); // Bigger stack for WiFi/SSL
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) delay(500);
+  Serial.println("Actuator Online.");
 
-    // Start Scheduler (In Arduino Pico, this happens automatically after setup)
+  picoClient.setInsecure();
+  client.setServer(mqtt_server, mqtt_port);
+  client.setCallback(callback);
 }
 
 void loop() {
-    // In FreeRTOS, the loop is usually empty or used for low-priority idle work.
-    // The real work happens in the tasks above.
-    vTaskDelete(NULL); // Kill the loop task to free memory
+  // 1. Maintain Network
+  if (!client.connected()) {
+    String clientId = "PICO_Actuator-" + String(random(0xffff), HEX);
+    if (client.connect(clientId.c_str(), mqtt_username, mqtt_password)) {
+      client.subscribe(actuation_topic);
+      Serial.println("Subscribed.");
+    } else { delay(5000); }
+  }
+  client.loop(); // This checks for new packets -> triggers callback -> fills queue
+
+  // 2. Process Queue (Consumer)
+  // Logic: Notice queue has items -> Try locking -> If free, Execute oldest
+  if (queueCount > 0) {
+    if (!motorMutex) {
+      // Mutex is FREE. We can proceed.
+      bool actionToPerform;
+      if (dequeueLightCommand(actionToPerform)) {
+         handleLightCommand(actionToPerform);
+      }
+    } 
+    // If motorMutex is TRUE, we just loop again (non-blocking wait)
+  }
 }
